@@ -1,18 +1,13 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\PropertyController;
+use App\Http\Controllers\QRController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
-Route::get('/', function () {
-    return Inertia::render('Welcome', [
-        'canLogin' => Route::has('login'),
-        'canRegister' => Route::has('register'),
-        'laravelVersion' => Application::VERSION,
-        'phpVersion' => PHP_VERSION,
-    ]);
-});
+Route::get('/', [PropertyController::class, 'index']);
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
@@ -23,5 +18,13 @@ Route::middleware('auth')->group(function () {
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
+
+
+
+Route::get('/catalog', [PropertyController::class, 'index'])->name('catalog.index');
+Route::get('/catalog/{property}', [PropertyController::class, 'show'])->name('catalog.show');
+
+Route::post('/qr/generate', [QRController::class, 'generate'])->name('qr.generate');
+Route::get('/qr/download', [QRController::class, 'download'])->name('qr.download');
 
 require __DIR__.'/auth.php';
