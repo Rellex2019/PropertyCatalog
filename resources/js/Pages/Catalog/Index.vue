@@ -1,22 +1,14 @@
-<script>
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import GuestLayout from '@/Layouts/GuestLayout.vue';
-
-// Получаем данные из глобального объекта
-const page = typeof window !== 'undefined' ? window.__INERTIA_PAGE__ : null;
-const layout = page?.props?.auth?.user?.name ? AuthenticatedLayout : GuestLayout;
-
-export default {
-    layout: layout
-}
-</script>
-
 <script setup>
 import { ref, computed } from 'vue';
 import { Link, router, usePage,} from '@inertiajs/vue3';
 import PropertyCard from '@/Components/PropertyCard.vue';
 import PropertyFilters from '@/Components/PropertyFilters.vue';
 import PropertyStats from '@/Components/PropertyStats.vue';
+import DynamicAuthLayout from '@/Layouts/DynamicAuthLayout.vue';
+
+defineOptions({
+    layout: DynamicAuthLayout
+})
 
 const props = defineProps({
     properties: Array,

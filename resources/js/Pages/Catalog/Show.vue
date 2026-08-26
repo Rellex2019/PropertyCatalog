@@ -1,10 +1,10 @@
 <script setup>
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import DynamicAuthLayout from '@/Layouts/DynamicAuthLayout.vue';
 
 defineOptions({
-    layout: AuthenticatedLayout
+    layout: DynamicAuthLayout
 });
 
 const props = defineProps({
