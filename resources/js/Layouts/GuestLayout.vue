@@ -20,7 +20,7 @@ const showingNavigationDropdown = ref(false);
                         <div class="flex">
                             <!-- Logo -->
                             <div class="flex shrink-0 items-center">
-                                <Link :href="route('dashboard')">
+                                <Link :href="route('catalog.index')">
                                     <ApplicationLogo
                                         class="block h-9 w-auto fill-current text-gray-800"
                                     />
@@ -46,9 +46,6 @@ const showingNavigationDropdown = ref(false);
                         >
                             <Link :href="route('login')" type="button" class="px-3 py-2">
                                 Войти
-                            </Link>
-                            <Link :href="route('register')" type="button" class="px-3 py-2">
-                                Зарегистрироваться
                             </Link>
                         </div>
                     </div>
