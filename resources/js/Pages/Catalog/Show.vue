@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed } from 'vue';
+import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import DynamicAuthLayout from '@/Layouts/DynamicAuthLayout.vue';
 
@@ -18,29 +18,111 @@ const isQrLoading = ref(false);
 const qrCode = ref(null);
 const isQrUnlocked = ref(false);
 
-// Главное изображение
-const mainImage = computed(() => {
-    return props.property.main_image || props.property.image || 
-           'https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=No+Image';
+// ✅ Состояние для карусели
+const currentSlideIndex = ref(0);
+const isTransitioning = ref(false);
+
+// ✅ Собираем все изображения в массив
+const allImages = computed(() => {
+    const images = [];
+    
+    // Добавляем главное изображение
+    if (props.property.main_image || props.property.image) {
+        images.push(props.property.main_image || props.property.image);
+    }
+    
+    // Добавляем дополнительные изображения
+    if (props.property.images && Array.isArray(props.property.images)) {
+        images.push(...props.property.images);
+    }
+    
+    // Если изображений нет, добавляем заглушку
+    if (images.length === 0) {
+        images.push('https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=No+Image');
+    }
+    
+    return images;
 });
 
-// Все изображения
-const images = computed(() => {
-    return props.property.all_images || [];
+// Текущее изображение
+const currentImage = computed(() => {
+    return allImages.value[currentSlideIndex.value] || allImages.value[0];
 });
 
-// Форматирование цены
-const formattedPrice = computed(() => {
-    return new Intl.NumberFormat('ru-RU').format(props.property.price);
-});
+// Общее количество изображений
+const totalImages = computed(() => allImages.value.length);
 
-// Текущее изображение для показа
-const currentImage = ref(mainImage.value);
+// Показывать ли навигацию
+const showNavigation = computed(() => totalImages.value > 1);
 
-// Смена изображения
-const changeImage = (image) => {
-    currentImage.value = image;
+// Показывать ли индикаторы
+const showIndicators = computed(() => totalImages.value > 1);
+
+// ✅ Переключение на следующий слайд
+const nextSlide = () => {
+    if (isTransitioning.value || totalImages.value <= 1) return;
+    
+    isTransitioning.value = true;
+    currentSlideIndex.value = (currentSlideIndex.value + 1) % totalImages.value;
+    
+    setTimeout(() => {
+        isTransitioning.value = false;
+    }, 300);
 };
+
+// ✅ Переключение на предыдущий слайд
+const prevSlide = () => {
+    if (isTransitioning.value || totalImages.value <= 1) return;
+    
+    isTransitioning.value = true;
+    currentSlideIndex.value = (currentSlideIndex.value - 1 + totalImages.value) % totalImages.value;
+    
+    setTimeout(() => {
+        isTransitioning.value = false;
+    }, 300);
+};
+
+// ✅ Переход к конкретному слайду
+const goToSlide = (index) => {
+    if (isTransitioning.value || index === currentSlideIndex.value) return;
+    
+    isTransitioning.value = true;
+    currentSlideIndex.value = index;
+    
+    setTimeout(() => {
+        isTransitioning.value = false;
+    }, 300);
+};
+
+// ✅ Автопрокрутка
+let autoplayInterval = null;
+
+const startAutoplay = () => {
+    if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+    }
+    if (totalImages.value > 1) {
+        autoplayInterval = setInterval(() => {
+            nextSlide();
+        }, 5000);
+    }
+};
+
+const stopAutoplay = () => {
+    if (autoplayInterval) {
+        clearInterval(autoplayInterval);
+        autoplayInterval = null;
+    }
+};
+
+// ✅ Запускаем и останавливаем автопрокрутку
+onMounted(() => {
+    startAutoplay();
+});
+
+onBeforeUnmount(() => {
+    stopAutoplay();
+});
 
 // Генерация QR-кода при нажатии
 const generateQR = async () => {
@@ -105,6 +187,11 @@ const statusClass = computed(() => {
     };
     return statusMap[props.property.status] || 'bg-gray-500';
 });
+
+// Форматирование цены
+const formattedPrice = computed(() => {
+    return new Intl.NumberFormat('ru-RU').format(props.property.price);
+});
 </script>
 
 <template>
@@ -121,34 +208,112 @@ const statusClass = computed(() => {
 
             <!-- Основная информация -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <!-- Галерея изображений -->
+                <!-- Галерея изображений с каруселью -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 p-6">
-                    <!-- Главное изображение -->
+                    <!-- Карусель -->
                     <div class="relative">
-                        <img 
-                            :src="currentImage" 
-                            :alt="property.title"
-                            class="w-full h-96 object-cover rounded-lg"
-                        />
-                        
-                        <!-- Бейджи -->
-                        <div class="absolute top-4 left-4 flex flex-col gap-2">
-                            <span class="px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full">
-                                {{ property.type }}
-                            </span>
+                        <!-- Контейнер с изображением -->
+                        <div class="relative overflow-hidden rounded-lg bg-gray-100" style="height: 400px;">
+                            <img 
+                                :src="currentImage" 
+                                :alt="property.title"
+                                class="w-full h-full object-cover transition-opacity duration-300"
+                                :class="{ 'opacity-75': isTransitioning }"
+                            />
+                            
+                            <!-- Количество фото -->
+                            <div v-if="showNavigation" class="absolute bottom-4 right-4 bg-black/60 text-white text-xs px-3 py-1 rounded-full">
+                                {{ currentSlideIndex + 1 }} / {{ totalImages }}
+                            </div>
+                            
+                            <!-- Бейджи поверх карусели -->
+                            <div class="absolute top-4 left-4 flex flex-col gap-2">
+                                <span class="px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full">
+                                    {{ property.type }}
+                                </span>
+                                <span 
+                                    v-if="property.is_featured"
+                                    class="px-3 py-1 bg-yellow-500 text-white text-xs font-semibold rounded-full"
+                                >
+                                    ★ Избранное
+                                </span>
+                            </div>
+                            
                             <span 
-                                v-if="property.is_featured"
-                                class="px-3 py-1 bg-yellow-500 text-white text-xs font-semibold rounded-full"
+                                :class="['absolute top-4 right-4 px-3 py-1 text-white text-xs font-semibold rounded-full', statusClass]"
                             >
-                                ★ Избранное
+                                {{ property.status }}
                             </span>
                         </div>
-                        
-                        <span 
-                            :class="['absolute top-4 right-4 px-3 py-1 text-white text-xs font-semibold rounded-full', statusClass]"
+
+                        <!-- Кнопки навигации -->
+                        <button
+                            v-if="showNavigation"
+                            @click="prevSlide"
+                            @mouseenter="stopAutoplay"
+                            @mouseleave="startAutoplay"
+                            class="absolute left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none"
+                            aria-label="Предыдущее фото"
                         >
-                            {{ property.status }}
-                        </span>
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                            </svg>
+                        </button>
+
+                        <button
+                            v-if="showNavigation"
+                            @click="nextSlide"
+                            @mouseenter="stopAutoplay"
+                            @mouseleave="startAutoplay"
+                            class="absolute right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-2 rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none"
+                            aria-label="Следующее фото"
+                        >
+                            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                            </svg>
+                        </button>
+
+                        <!-- Индикаторы -->
+                        <div v-if="showIndicators" class="flex justify-center gap-2 mt-4">
+                            <button
+                                v-for="(image, index) in allImages"
+                                :key="index"
+                                @click="goToSlide(index)"
+                                @mouseenter="stopAutoplay"
+                                @mouseleave="startAutoplay"
+                                class="h-2 rounded-full transition-all duration-300 focus:outline-none"
+                                :class="[
+                                    index === currentSlideIndex 
+                                        ? 'w-8 bg-indigo-600' 
+                                        : 'w-2 bg-gray-300 hover:bg-gray-400'
+                                ]"
+                                :aria-label="`Перейти к фото ${index + 1}`"
+                            />
+                        </div>
+
+                        <!-- Миниатюры -->
+                        <div v-if="showNavigation" class="flex gap-2 mt-3 overflow-x-auto pb-2">
+                            <button
+                                v-for="(image, index) in allImages"
+                                :key="index"
+                                @click="goToSlide(index)"
+                                @mouseenter="stopAutoplay"
+                                @mouseleave="startAutoplay"
+                                class="flex-shrink-0 w-16 h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 focus:outline-none"
+                                :class="[
+                                    index === currentSlideIndex 
+                                        ? 'border-indigo-600 ring-2 ring-indigo-200' 
+                                        : 'border-transparent hover:border-gray-300'
+                                ]"
+                            >
+                                <img 
+                                    :src="image" 
+                                    :alt="`Фото ${index + 1}`"
+                                    class="w-full h-full object-cover"
+                                    loading="lazy"
+                                />
+                            </button>
+                        </div>
                     </div>
 
                     <!-- Информация -->
@@ -326,13 +491,27 @@ const statusClass = computed(() => {
 </template>
 
 <style scoped>
-/* Стили для анимации перехода */
-.fade-enter-active,
-.fade-leave-active {
+/* Плавный переход для изображений */
+.transition-opacity {
     transition: opacity 0.3s ease;
 }
-.fade-enter-from,
-.fade-leave-to {
-    opacity: 0;
+
+/* Стили для скролла миниатюр */
+.overflow-x-auto::-webkit-scrollbar {
+    height: 4px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 2px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb {
+    background: #c1c1c1;
+    border-radius: 2px;
+}
+
+.overflow-x-auto::-webkit-scrollbar-thumb:hover {
+    background: #a8a8a8;
 }
 </style>

@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Helpers\ImageHelper;
 use App\Models\Property;
 use Illuminate\Database\Seeder;
 
@@ -28,11 +29,11 @@ class PropertySeeder extends Seeder
             'total_floors' => 12,
             'type' => 'Квартира',
             'status' => 'Продается',
-            'image' => 'https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Modern+Apartment',
+            'image' => ImageHelper::getStorageUrl('images/default/defaultApart.jpg'),
             'images' => [
-                'https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Kitchen',
-                'https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Living+Room',
-                'https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=Bedroom',
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
             ],
             'amenities' => ['Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Wi-Fi'],
             'is_featured' => true,
@@ -54,11 +55,11 @@ class PropertySeeder extends Seeder
             'total_floors' => 2,
             'type' => 'Дом',
             'status' => 'Продается',
-            'image' => 'https://via.placeholder.com/800x600/10B981/FFFFFF?text=House+with+Garden',
+            'image' => ImageHelper::getStorageUrl('images/default/defaultApart.jpg'),
             'images' => [
-                'https://via.placeholder.com/800x600/10B981/FFFFFF?text=Garden',
-                'https://via.placeholder.com/800x600/10B981/FFFFFF?text=Living+Room',
-                'https://via.placeholder.com/800x600/10B981/FFFFFF?text=Kitchen',
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
             ],
             'amenities' => ['Парковка', 'Охрана', 'Детская площадка', 'Сауна', 'Балкон'],
             'is_featured' => false,
@@ -80,40 +81,14 @@ class PropertySeeder extends Seeder
             'total_floors' => 16,
             'type' => 'Квартира',
             'status' => 'Продается',
-            'image' => 'https://via.placeholder.com/800x600/F59E0B/FFFFFF?text=Studio+Apartment',
+            'image' => ImageHelper::getStorageUrl('images/default/defaultApart.jpg'),
             'images' => [
-                'https://via.placeholder.com/800x600/F59E0B/FFFFFF?text=Studio+Room',
-                'https://via.placeholder.com/800x600/F59E0B/FFFFFF?text=Kitchen+Area',
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
             ],
             'amenities' => ['Лифт', 'Консьерж', 'Wi-Fi', 'Кондиционер'],
             'is_featured' => false,
-            'is_active' => true,
-            'published_at' => now(),
-        ]);
-
-        Property::create([
-            'title' => 'Элитный пентхаус с панорамным видом',
-            'description' => 'Роскошный пентхаус на последнем этаже с потрясающим видом на город. 
-                              Дизайнерский ремонт, большие окна, терраса, лифт.',
-            'price' => 85000000,
-            'currency' => '₽',
-            'address' => 'ул. Арбат, 23',
-            'city' => 'Москва',
-            'area' => 220.0,
-            'rooms' => 4,
-            'floor' => 15,
-            'total_floors' => 15,
-            'type' => 'Квартира',
-            'status' => 'Продается',
-            'image' => 'https://via.placeholder.com/800x600/6366F1/FFFFFF?text=Luxury+Penthouse',
-            'images' => [
-                'https://via.placeholder.com/800x600/6366F1/FFFFFF?text=Panorama',
-                'https://via.placeholder.com/800x600/6366F1/FFFFFF?text=Living+Area',
-                'https://via.placeholder.com/800x600/6366F1/FFFFFF?text=Bedroom',
-                'https://via.placeholder.com/800x600/6366F1/FFFFFF?text=Terrace',
-            ],
-            'amenities' => ['Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Бассейн', 'Сауна', 'Балкон', 'Система умный дом'],
-            'is_featured' => true,
             'is_active' => true,
             'published_at' => now(),
         ]);

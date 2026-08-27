@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Helpers\ImageHelper;
 use App\Models\Property;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -30,11 +31,11 @@ class PropertyFactory extends Factory
             'total_floors' => $this->faker->numberBetween(1, 25),
             'type' => $this->faker->randomElement($types),
             'status' => $this->faker->randomElement($statuses),
-            'image' => $this->faker->imageUrl(800, 600, 'property', true),
+            'image' => ImageHelper::getStorageUrl('images/default/defaultApart.jpg'),
             'images' => [
-                $this->faker->imageUrl(800, 600, 'property', true),
-                $this->faker->imageUrl(800, 600, 'property', true),
-                $this->faker->imageUrl(800, 600, 'property', true),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
+                ImageHelper::getStorageUrl('images/default/defaultLayout.jpg'),
             ],
             'amenities' => $this->faker->randomElements([
                 'Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Детская площадка',
