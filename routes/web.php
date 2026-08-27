@@ -26,6 +26,8 @@ Route::get('/catalog/{property}', [PropertyController::class, 'show'])->name('ca
 
 Route::post('/qr/generate', [QRController::class, 'generate'])->name('qr.generate');
 Route::get('/qr/download', [QRController::class, 'download'])->name('qr.download');
+Route::post('/qr/download-with-logo', [QRController::class, 'downloadWithLogo'])->name('qr.download-with-logo');
+Route::get('/qr/inline', [QRController::class, 'inline'])->name('qr.inline');
 
 require __DIR__.'/auth.php';
 require __DIR__.'/admin.php';

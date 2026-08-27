@@ -13,14 +13,18 @@ const props = defineProps({
     propertyUrl: String
 });
 
+// Состояние для QR-кода
 const isQrLoading = ref(false);
 const qrCode = ref(null);
 const isQrUnlocked = ref(false);
+const isDownloading = ref(false);
 
+// Состояние для карусели
 const currentSlideIndex = ref(0);
 const isTransitioning = ref(false);
 const showCatalogButton = ref(false);
 
+// Все изображения
 const allImages = computed(() => {
     const images = [];
     
@@ -47,6 +51,7 @@ const totalImages = computed(() => allImages.value.length);
 const showNavigation = computed(() => totalImages.value > 1);
 const showIndicators = computed(() => totalImages.value > 1);
 
+// Навигация по слайдам
 const nextSlide = () => {
     if (isTransitioning.value || totalImages.value <= 1) return;
     
@@ -80,6 +85,7 @@ const goToSlide = (index) => {
     }, 300);
 };
 
+// Автопрокрутка
 let autoplayInterval = null;
 
 const startAutoplay = () => {
@@ -100,11 +106,13 @@ const stopAutoplay = () => {
     }
 };
 
+// Обработка скролла для плавающей кнопки
 const handleScroll = () => {
     const scrollY = window.scrollY;
     showCatalogButton.value = scrollY > 200;
 };
 
+// Жизненный цикл
 onMounted(() => {
     startAutoplay();
     window.addEventListener('scroll', handleScroll);
@@ -116,6 +124,7 @@ onBeforeUnmount(() => {
     window.removeEventListener('scroll', handleScroll);
 });
 
+// Генерация QR-кода
 const generateQR = async () => {
     if (qrCode.value) {
         isQrUnlocked.value = true;
@@ -159,14 +168,46 @@ const generateQR = async () => {
     }
 };
 
+// Сброс QR (скрыть)
 const resetQR = () => {
     isQrUnlocked.value = false;
 };
 
+// Скачивание QR-кода
+const downloadQR = async () => {
+    if (!qrCode.value) {
+        alert('Сначала сгенерируйте QR-код');
+        return;
+    }
+
+    isDownloading.value = true;
+
+    try {
+        const url = props.propertyUrl;
+        const downloadUrl = `/qr/download?data=${encodeURIComponent(url)}&size=500`;
+        
+        // Создаем ссылку для скачивания
+        const link = document.createElement('a');
+        link.href = downloadUrl;
+        link.download = `qrcode_${props.property.id}_${Date.now()}.png`;
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        
+    } catch (error) {
+        console.error('Ошибка скачивания QR:', error);
+        alert('Не удалось скачать QR-код. Попробуйте позже.');
+    } finally {
+        isDownloading.value = false;
+    }
+};
+
+// Удобства
 const amenities = computed(() => {
     return props.property.amenities || [];
 });
 
+// Метка статуса
 const statusClass = computed(() => {
     const statusMap = {
         'Продается': 'bg-green-500',
@@ -176,6 +217,7 @@ const statusClass = computed(() => {
     return statusMap[props.property.status] || 'bg-gray-500';
 });
 
+// Форматирование цены
 const formattedPrice = computed(() => {
     return new Intl.NumberFormat('ru-RU').format(props.property.price);
 });
@@ -184,6 +226,7 @@ const formattedPrice = computed(() => {
 <template>
     <div class="py-6 px-4 sm:py-8 sm:px-6 lg:px-8">
         <div class="max-w-7xl mx-auto">
+            <!-- Хлебные крошки -->
             <nav class="flex flex-wrap items-center mb-4 text-xs sm:text-sm text-gray-500 gap-1">
                 <Link href="/" class="hover:text-gray-700">Главная</Link>
                 <span class="mx-1">/</span>
@@ -209,8 +252,11 @@ const formattedPrice = computed(() => {
                 </Link>
             </div>
 
+            <!-- Основная карточка -->
             <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+                <!-- Галерея и информация -->
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
+                    <!-- Левая колонка - Галерея -->
                     <div class="relative">
                         <div class="relative overflow-hidden rounded-lg bg-gray-100" style="height: 250px; height: 350px; height: 400px;">
                             <img 
@@ -243,6 +289,7 @@ const formattedPrice = computed(() => {
                             </span>
                         </div>
 
+                        <!-- Кнопки навигации карусели -->
                         <button
                             v-if="showNavigation"
                             @click="prevSlide"
@@ -269,6 +316,7 @@ const formattedPrice = computed(() => {
                             </svg>
                         </button>
 
+                        <!-- Индикаторы -->
                         <div v-if="showIndicators" class="flex justify-center gap-1.5 sm:gap-2 mt-3 sm:mt-4">
                             <button
                                 v-for="(image, index) in allImages"
@@ -286,6 +334,7 @@ const formattedPrice = computed(() => {
                             />
                         </div>
 
+                        <!-- Миниатюры -->
                         <div v-if="showNavigation" class="flex gap-1.5 sm:gap-2 mt-2 sm:mt-3 overflow-x-auto pb-2">
                             <button
                                 v-for="(image, index) in allImages"
@@ -310,6 +359,7 @@ const formattedPrice = computed(() => {
                         </div>
                     </div>
 
+                    <!-- Правая колонка - Информация -->
                     <div>
                         <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
                             {{ property.title }}
@@ -329,6 +379,7 @@ const formattedPrice = computed(() => {
                             </span>
                         </div>
 
+                        <!-- Характеристики -->
                         <div class="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
                             <div class="p-2 sm:p-3 bg-gray-50 rounded-lg">
                                 <span class="block text-[10px] sm:text-sm text-gray-500">Площадь</span>
@@ -348,6 +399,7 @@ const formattedPrice = computed(() => {
                             </div>
                         </div>
 
+                        <!-- Удобства -->
                         <div v-if="amenities.length" class="mb-4 sm:mb-6">
                             <h3 class="text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Удобства:</h3>
                             <div class="flex flex-wrap gap-1 sm:gap-2">
@@ -363,6 +415,7 @@ const formattedPrice = computed(() => {
                     </div>
                 </div>
 
+                <!-- Описание -->
                 <div class="px-4 sm:px-6 py-4 sm:py-6 border-t border-gray-100">
                     <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Описание</h2>
                     <p class="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-line">
@@ -370,6 +423,7 @@ const formattedPrice = computed(() => {
                     </p>
                 </div>
 
+                <!-- QR-код -->
                 <div class="px-4 sm:px-6 py-4 sm:py-6 border-t border-gray-100">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-0">
                         <h2 class="text-lg sm:text-xl font-semibold text-gray-900">QR-код объекта</h2>
@@ -383,6 +437,7 @@ const formattedPrice = computed(() => {
                     </div>
 
                     <div class="flex flex-col items-center">
+                        <!-- Замкнутый QR (размытый) -->
                         <div 
                             v-if="!isQrUnlocked"
                             @click="generateQR"
@@ -415,6 +470,7 @@ const formattedPrice = computed(() => {
                             </p>
                         </div>
 
+                        <!-- Разблокированный QR -->
                         <div v-else class="flex flex-col items-center">
                             <div class="w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 relative">
                                 <img 
@@ -422,6 +478,7 @@ const formattedPrice = computed(() => {
                                     :src="qrCode" 
                                     alt="QR Code"
                                     class="w-full h-full object-contain rounded-lg"
+                                    :class="{ 'opacity-50': isDownloading }"
                                 />
                                 <div v-else-if="isQrLoading" class="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
                                     <div class="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 border-b-2 border-indigo-600"></div>
@@ -430,17 +487,34 @@ const formattedPrice = computed(() => {
                             <p class="mt-1.5 sm:mt-2 text-[10px] sm:text-sm text-gray-500 text-center">
                                 QR-код для просмотра объекта
                             </p>
-                            <button 
-                                @click="generateQR"
-                                class="mt-2 sm:mt-3 px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-indigo-600 hover:text-indigo-800"
-                            >
-                                Обновить QR-код
-                            </button>
+                            
+                            <!-- Кнопки управления QR -->
+                            <div class="flex flex-wrap items-center justify-center gap-2 mt-2 sm:mt-3">
+                                <button 
+                                    @click="generateQR"
+                                    class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-indigo-600 hover:text-indigo-800"
+                                >
+                                    Обновить
+                                </button>
+                                
+                                <!-- Кнопка скачивания -->
+                                <button 
+                                    @click="downloadQR"
+                                    :disabled="isDownloading || !qrCode"
+                                    class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white text-xs sm:text-sm rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                >
+                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
+                                    </svg>
+                                    {{ isDownloading ? 'Скачивание...' : 'Скачать PNG' }}
+                                </button>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
 
+            <!-- Похожие объекты -->
             <div v-if="similarProperties.length" class="mt-8 sm:mt-12">
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Похожие объекты</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
