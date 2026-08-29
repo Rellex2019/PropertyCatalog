@@ -91,6 +91,8 @@ const submit = () => {
             form[key].forEach((item, index) => {
                 formData.append(`amenities[${index}]`, item);
             });
+        } else if (key === 'is_featured' || key === 'is_active') {
+            formData.append(key, form[key] ? '1' : '0');
         } else if (key !== 'images' && key !== 'image') {
             formData.append(key, form[key] ?? '');
         }

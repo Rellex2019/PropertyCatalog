@@ -1,6 +1,6 @@
 <script setup>
 import { ref, computed, onMounted, onBeforeUnmount } from 'vue';
-import { Link } from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import DynamicAuthLayout from '@/Layouts/DynamicAuthLayout.vue';
 
 defineOptions({
@@ -145,7 +145,10 @@ const generateQR = async () => {
                 'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || '',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ data: url })
+            body: JSON.stringify({ 
+                data: url,
+                size: 300
+            })
         });
 
         if (!response.ok) {
@@ -174,7 +177,7 @@ const resetQR = () => {
 };
 
 // Скачивание QR-кода
-const downloadQR = async () => {
+const downloadQR = () => {
     if (!qrCode.value) {
         alert('Сначала сгенерируйте QR-код');
         return;
@@ -182,24 +185,15 @@ const downloadQR = async () => {
 
     isDownloading.value = true;
 
-    try {
-        const url = props.propertyUrl;
-        const downloadUrl = `/qr/download?data=${encodeURIComponent(url)}&size=500`;
-        
-        // Создаем ссылку для скачивания
-        const link = document.createElement('a');
-        link.href = downloadUrl;
-        link.download = `qrcode_${props.property.id}_${Date.now()}.png`;
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
-        
-    } catch (error) {
-        console.error('Ошибка скачивания QR:', error);
-        alert('Не удалось скачать QR-код. Попробуйте позже.');
-    } finally {
-        isDownloading.value = false;
-    }
+    // Создаем ссылку для скачивания
+    const link = document.createElement('a');
+    link.href = qrCode.value;
+    link.download = `qrcode_${props.property.id}_${Date.now()}.png`;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    
+    isDownloading.value = false;
 };
 
 // Удобства
@@ -258,7 +252,7 @@ const formattedPrice = computed(() => {
                 <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
                     <!-- Левая колонка - Галерея -->
                     <div class="relative">
-                        <div class="relative overflow-hidden rounded-lg bg-gray-100" style="height: 250px; height: 350px; height: 400px;">
+                        <div class="relative overflow-hidden rounded-lg bg-gray-100" style="height: 400px;">
                             <img 
                                 :src="currentImage" 
                                 :alt="property.title"

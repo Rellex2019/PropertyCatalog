@@ -10,7 +10,7 @@ use Inertia\Response;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
-class PropertyController extends Controller 
+class PropertyController extends Controller
 {
     /**
      * Список объектов недвижимости
@@ -24,8 +24,8 @@ class PropertyController extends Controller
             $search = $request->search;
             $query->where(function ($q) use ($search) {
                 $q->where('title', 'like', "%{$search}%")
-                  ->orWhere('address', 'like', "%{$search}%")
-                  ->orWhere('city', 'like', "%{$search}%");
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%");
             });
         }
 
@@ -76,10 +76,24 @@ class PropertyController extends Controller
             'types' => ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'],
             'statuses' => ['Продается', 'Сдается', 'Продано'],
             'amenitiesList' => [
-                'Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Детская площадка',
-                'Спортзал', 'Бассейн', 'Сауна', 'Wi-Fi', 'Кондиционер',
-                'Балкон', 'Терраса', 'Камин', 'Система умный дом',
-                'Мебель', 'Бытовая техника', 'Интернет', 'Кабельное ТВ'
+                'Парковка',
+                'Лифт',
+                'Консьерж',
+                'Охрана',
+                'Детская площадка',
+                'Спортзал',
+                'Бассейн',
+                'Сауна',
+                'Wi-Fi',
+                'Кондиционер',
+                'Балкон',
+                'Терраса',
+                'Камин',
+                'Система умный дом',
+                'Мебель',
+                'Бытовая техника',
+                'Интернет',
+                'Кабельное ТВ'
             ],
         ]);
     }
@@ -102,9 +116,9 @@ class PropertyController extends Controller
             'total_floors' => 'required|integer|min:0',
             'type' => 'required|string',
             'status' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:102400',   // 100 МБ
             'images' => 'nullable|array',
-            'images.*' => 'image|max:2048',
+            'images.*' => 'image|max:102400',         // 100 МБ
             'amenities' => 'nullable|array',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
@@ -154,10 +168,24 @@ class PropertyController extends Controller
             'types' => ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'],
             'statuses' => ['Продается', 'Сдается', 'Продано'],
             'amenitiesList' => [
-                'Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Детская площадка',
-                'Спортзал', 'Бассейн', 'Сауна', 'Wi-Fi', 'Кондиционер',
-                'Балкон', 'Терраса', 'Камин', 'Система умный дом',
-                'Мебель', 'Бытовая техника', 'Интернет', 'Кабельное ТВ'
+                'Парковка',
+                'Лифт',
+                'Консьерж',
+                'Охрана',
+                'Детская площадка',
+                'Спортзал',
+                'Бассейн',
+                'Сауна',
+                'Wi-Fi',
+                'Кондиционер',
+                'Балкон',
+                'Терраса',
+                'Камин',
+                'Система умный дом',
+                'Мебель',
+                'Бытовая техника',
+                'Интернет',
+                'Кабельное ТВ'
             ],
         ]);
     }
@@ -180,9 +208,9 @@ class PropertyController extends Controller
             'total_floors' => 'required|integer|min:0',
             'type' => 'required|string',
             'status' => 'required|string',
-            'image' => 'nullable|image|max:2048',
+            'image' => 'nullable|image|max:102400',   // 100 МБ
             'images' => 'nullable|array',
-            'images.*' => 'image|max:2048',
+            'images.*' => 'image|max:102400',
             'amenities' => 'nullable|array',
             'is_featured' => 'boolean',
             'is_active' => 'boolean',
@@ -196,7 +224,7 @@ class PropertyController extends Controller
                 $oldPath = str_replace('/storage/', '', $property->image);
                 Storage::disk('public')->delete($oldPath);
             }
-            
+
             $image = $request->file('image');
             $path = $image->store('properties', 'public');
             $validated['image'] = '/storage/' . $path;
@@ -211,7 +239,7 @@ class PropertyController extends Controller
                     Storage::disk('public')->delete($oldPath);
                 }
             }
-            
+
             $images = [];
             foreach ($request->file('images') as $image) {
                 $path = $image->store('properties', 'public');
@@ -241,7 +269,7 @@ class PropertyController extends Controller
             $path = str_replace('/storage/', '', $property->image);
             Storage::disk('public')->delete($path);
         }
-        
+
         if ($property->images) {
             foreach ($property->images as $image) {
                 $path = str_replace('/storage/', '', $image);
