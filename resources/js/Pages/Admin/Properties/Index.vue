@@ -15,6 +15,7 @@ const props = defineProps({
 });
 
 const search = ref(props.filters?.search || '');
+const activeMenu = ref(null);
 
 const formatPrice = (price) => {
     return new Intl.NumberFormat('ru-RU').format(price);
@@ -43,10 +44,25 @@ const deleteProperty = (property) => {
         router.delete(`/admin/properties/${property.id}`);
     }
 };
+
+// Открыть/закрыть меню действий
+const toggleActionMenu = (propertyId) => {
+    if (activeMenu.value === propertyId) {
+        activeMenu.value = null;
+    } else {
+        activeMenu.value = propertyId;
+    }
+};
+
+// Закрыть меню при клике вне
+const closeMenu = () => {
+    activeMenu.value = null;
+};
 </script>
 
 <template>
     <div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+        <!-- Заголовок и кнопка добавления -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
             <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Управление недвижимостью</h1>
             <Link 
@@ -57,6 +73,7 @@ const deleteProperty = (property) => {
             </Link>
         </div>
 
+        <!-- Статистика -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
             <div class="bg-white rounded-lg shadow p-3 sm:p-4">
                 <p class="text-[10px] sm:text-sm text-gray-500">Всего</p>
@@ -76,6 +93,7 @@ const deleteProperty = (property) => {
             </div>
         </div>
 
+        <!-- Поиск -->
         <div class="bg-white rounded-lg shadow p-3 sm:p-4 mb-4 sm:mb-6">
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <input 
@@ -94,23 +112,41 @@ const deleteProperty = (property) => {
             </div>
         </div>
 
+        <!-- Таблица и карточки -->
         <div class="bg-white shadow overflow-hidden sm:rounded-lg">
-            <div class="overflow-x-auto">
+            <!-- Десктопная таблица (скрыта на мобилках) -->
+            <div class="hidden sm:block overflow-x-auto">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
                         <tr>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">ID</th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">Изображение</th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">Название</th>
-                            <th class="hidden sm:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">Цена</th>
-                            <th class="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">Тип</th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">Статус</th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">Действия</th>
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                ID
+                            </th>
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Изображение
+                            </th>
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Название
+                            </th>
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Цена
+                            </th>
+                            <th class="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Тип
+                            </th>
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Статус
+                            </th>
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                Действия
+                            </th>
                         </tr>
                     </thead>
                     <tbody class="bg-white divide-y divide-gray-200">
                         <tr v-for="property in properties.data" :key="property.id">
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ property.id }}</td>
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                                {{ property.id }}
+                            </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
                                 <img 
                                     :src="property.image || 'https://via.placeholder.com/50x50/4F46E5/FFFFFF?text=No+Image'" 
@@ -119,15 +155,25 @@ const deleteProperty = (property) => {
                                 >
                             </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4">
-                                <div class="text-xs sm:text-sm font-medium text-gray-900">{{ property.title }}</div>
-                                <div class="text-[10px] sm:text-sm text-gray-500">{{ property.address }}</div>
+                            <Link :href="`/catalog/${property.id}`">
+                                <div class="text-xs sm:text-sm font-medium text-gray-900">
+                                    {{ property.title }}
+                                </div>
+                                <div class="text-[10px] sm:text-sm text-gray-500">
+                                    {{ property.address }}
+                                </div>
+                            </Link>
                             </td>
-                            <td class="hidden sm:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
                                 {{ formatPrice(property.price) }} ₽
                             </td>
-                            <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">{{ property.type }}</td>
+                            <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                                {{ property.type }}
+                            </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                <span :class="['px-1.5 sm:px-2 py-0.5 sm:py-1 text-[8px] sm:text-xs font-semibold rounded-full', getStatusBadge(property.status)]">
+                                <span 
+                                    :class="['px-1.5 sm:px-2 py-0.5 sm:py-1 text-[8px] sm:text-xs font-semibold rounded-full', getStatusBadge(property.status)]"
+                                >
                                     {{ property.status }}
                                 </span>
                             </td>
@@ -150,6 +196,91 @@ const deleteProperty = (property) => {
                 </table>
             </div>
 
+            <!-- Мобильные карточки (показываем только на sm и меньше) -->
+            <div class="sm:hidden divide-y divide-gray-200">
+                <div 
+                    v-for="property in properties.data" 
+                    :key="property.id"
+                    class="relative flex flex-col gap-2 px-4 py-4 hover:bg-gray-50"
+                >
+                    <div class="flex justify-between items-start">
+                        <div class="flex items-center gap-3">
+                            <img 
+                                :src="property.image || 'https://via.placeholder.com/50x50/4F46E5/FFFFFF?text=No+Image'" 
+                                :alt="property.title" 
+                                class="h-14 w-14 object-cover rounded"
+                            >
+                            <div>
+                                <div class="text-sm font-medium text-gray-900">
+                                    {{ property.title }}
+                                </div>
+                                <div class="text-xs text-gray-500">
+                                    {{ property.address }}
+                                </div>
+                                <div class="text-sm font-bold text-gray-900 mt-1">
+                                    {{ formatPrice(property.price) }} ₽
+                                </div>
+                            </div>
+                        </div>
+                        <button 
+                            class="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg p-2 text-xl font-bold"
+                            @click.stop="toggleActionMenu(property.id)"
+                        >
+                            ⋮
+                        </button>
+                    </div>
+                    <div class="flex justify-between items-center pt-2 border-t border-gray-100">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xs text-gray-500">ID: {{ property.id }}</span>
+                            <span 
+                                :class="['px-2 py-0.5 text-[10px] font-semibold rounded-full', getStatusBadge(property.status)]"
+                            >
+                                {{ property.status }}
+                            </span>
+                        </div>
+                        <span class="text-xs text-gray-500">{{ property.type }}</span>
+                    </div>
+
+                    <!-- Выпадающее меню действий (показывается при клике на три точки) -->
+                    <div 
+                        v-if="activeMenu === property.id"
+                        class="absolute right-4 top-16 z-20 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1"
+                        @click.stop
+                    >
+                        <Link 
+                            :href="`/admin/properties/${property.id}/edit`"
+                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
+                            </svg>
+                            Редактировать
+                        </Link>
+                        <Link 
+                            :href="`/catalog/${property.id}`"
+                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" />
+                            </svg>
+                            Просмотр
+                        </Link>
+                        <div class="border-t border-gray-100"></div>
+                        <button 
+                            @click="deleteProperty(property)"
+                            class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
+                        >
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
+                            </svg>
+                            Удалить
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Пагинация -->
             <div v-if="properties.links" class="px-3 sm:px-6 py-3 sm:py-4 border-t border-gray-200">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
                     <div class="text-xs sm:text-sm text-gray-700">
@@ -171,5 +302,12 @@ const deleteProperty = (property) => {
                 </div>
             </div>
         </div>
+
+        <!-- Клик вне меню для закрытия -->
+        <div 
+            v-if="activeMenu !== null"
+            class="fixed inset-0 z-10"
+            @click="closeMenu"
+        ></div>
     </div>
 </template>
