@@ -4,7 +4,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
+import { useForm } from '@inertiajs/vue3';
 
 defineProps({
     status: {
@@ -23,7 +24,13 @@ const submit = () => {
 
 <template>
     <AuthInputLayout>
-        <Head title="Forgot Password" />
+        <SeoHead
+            title="Восстановление пароля"
+            description="Запросите ссылку для восстановления пароля от аккаунта ДомГид."
+            :noindex="true"
+        />
+
+        <h1 class="mb-4 text-2xl font-semibold text-gray-900">Восстановление пароля</h1>
 
         <div class="mb-4 text-sm text-gray-600">
             Forgot your password? No problem. Just let us know your email

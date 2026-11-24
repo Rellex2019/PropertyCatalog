@@ -13,15 +13,37 @@ export default {
 
 <script setup>
 import { ref, computed } from 'vue';
-import { Link, router, usePage,} from '@inertiajs/vue3';
+import { Link, router } from '@inertiajs/vue3';
 import PropertyCard from '@/Components/PropertyCard.vue';
 import PropertyFilters from '@/Components/PropertyFilters.vue';
 import PropertyStats from '@/Components/PropertyStats.vue';
+import SeoHead from '@/Components/SeoHead.vue';
 
 const props = defineProps({
     properties: Array,
     statistics: Object
 });
+
+const catalogDescription = computed(() =>
+    `Каталог недвижимости ДомГид: ${props.properties.length} актуальных объектов. Фильтруйте по типу, городу, цене и количеству комнат.`,
+);
+
+const catalogSchema = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'CollectionPage',
+    name: 'Каталог недвижимости',
+    url: route('catalog.index'),
+    mainEntity: {
+        '@type': 'ItemList',
+        numberOfItems: props.properties.length,
+        itemListElement: props.properties.slice(0, 12).map((property, index) => ({
+            '@type': 'ListItem',
+            position: index + 1,
+            name: property.title,
+            url: route('catalog.show', property.id),
+        })),
+    },
+}));
 
 // Состояние для фильтров
 const filters = ref({
@@ -121,6 +143,13 @@ const updateFilters = () => {
 </script>
 
 <template>
+    <SeoHead
+        title="Каталог недвижимости"
+        :description="catalogDescription"
+        :canonical="route('catalog.index')"
+        :schema="catalogSchema"
+    />
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Заголовок -->

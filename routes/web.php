@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
 
 Route::get('/', [PropertyController::class, 'home'])->name('home');
+Route::get('/sitemap.xml', [PropertyController::class, 'sitemap'])->name('sitemap');
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');

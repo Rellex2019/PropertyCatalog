@@ -14,6 +14,10 @@
 /.zed
 /auth.json
 /node_modules
+
+/bootstrap/ssr/assets/
+/bootstrap/ssr/ssr-manifest.json
+
 /public/build
 /public/fonts-manifest.dev.json
 /public/hot

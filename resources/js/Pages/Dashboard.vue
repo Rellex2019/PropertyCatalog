@@ -1,18 +1,22 @@
 <script setup>
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
 </script>
 
 <template>
-    <Head title="Dashboard" />
+    <SeoHead
+        title="Личный кабинет"
+        description="Личный кабинет пользователя ДомГид."
+        :noindex="true"
+    />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2
+            <h1
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Dashboard
-            </h2>
+                Личный кабинет
+            </h1>
         </template>
 
         <div class="py-12">

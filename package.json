@@ -4,7 +4,10 @@
     "type": "module",
     "scripts": {
         "build": "vite build",
-        "dev": "vite"
+        "build:ssr": "vite build --ssr",
+        "dev": "vite",
+        "dev:ssr": "concurrently -k \"npm run dev\" \"npm run ssr\"",
+        "ssr": "php artisan inertia:start-ssr"
     },
     "devDependencies": {
         "@inertiajs/vue3": "^2.0.0",

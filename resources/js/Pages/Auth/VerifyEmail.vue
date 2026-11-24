@@ -1,8 +1,9 @@
 <script setup>
 import { computed } from 'vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import { Link, useForm } from '@inertiajs/vue3';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
+import SeoHead from '@/Components/SeoHead.vue';
 
 const props = defineProps({
     status: {
@@ -23,7 +24,13 @@ const verificationLinkSent = computed(
 
 <template>
     <AuthInputLayout>
-        <Head title="Email Verification" />
+        <SeoHead
+            title="Подтверждение email"
+            description="Подтвердите адрес электронной почты, чтобы завершить регистрацию в ДомГид."
+            :noindex="true"
+        />
+
+        <h1 class="mb-4 text-2xl font-semibold text-gray-900">Подтверждение email</h1>
 
         <div class="mb-4 text-sm text-gray-600">
             Thanks for signing up! Before getting started, could you verify your

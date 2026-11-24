@@ -3,7 +3,7 @@ import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
 import DeleteUserForm from './Partials/DeleteUserForm.vue';
 import UpdatePasswordForm from './Partials/UpdatePasswordForm.vue';
 import UpdateProfileInformationForm from './Partials/UpdateProfileInformationForm.vue';
-import { Head } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
 
 defineProps({
     mustVerifyEmail: {
@@ -16,15 +16,19 @@ defineProps({
 </script>
 
 <template>
-    <Head title="Profile" />
+    <SeoHead
+        title="Профиль"
+        description="Настройки профиля пользователя ДомГид."
+        :noindex="true"
+    />
 
     <AuthenticatedLayout>
         <template #header>
-            <h2
+            <h1
                 class="text-xl font-semibold leading-tight text-gray-800"
             >
-                Profile
-            </h2>
+                Профиль
+            </h1>
         </template>
 
         <div class="py-12">

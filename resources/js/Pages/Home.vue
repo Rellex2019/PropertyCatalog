@@ -1,6 +1,7 @@
 <script setup>
 import { computed, ref, watch } from 'vue';
-import { Head, Link, router, usePage } from '@inertiajs/vue3';
+import { Link, router, usePage } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
 
 const props = defineProps({
     featuredProperties: {
@@ -114,12 +115,29 @@ const steps = [
         icon: 'M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z',
     },
 ];
+
+const homeSchema = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: page.props.seo?.siteName || 'ДомГид',
+    url: route('home'),
+    description: 'Каталог квартир, домов и коммерческой недвижимости в России.',
+    potentialAction: {
+        '@type': 'SearchAction',
+        target: `${route('catalog.index')}?search={search_term_string}`,
+        'query-input': 'required name=search_term_string',
+    },
+}));
 </script>
 
 <template>
-    <Head title="ДомГид — недвижимость для вашей жизни">
-        <meta name="description" content="Каталог квартир, домов и коммерческой недвижимости. Найдите жильё под ваш бюджет." />
-    </Head>
+    <SeoHead
+        title="Недвижимость: квартиры и дома"
+        description="ДомГид — каталог квартир, домов и коммерческой недвижимости. Сравнивайте варианты и находите жильё под свой бюджет."
+        :image="heroImage"
+        :canonical="route('home')"
+        :schema="homeSchema"
+    />
 
     <div class="min-h-screen bg-[#F7F4EF] text-[#1C2B29]">
         <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0B3B36]/95 backdrop-blur">
@@ -250,8 +268,9 @@ const steps = [
                         <div class="absolute -inset-6 rounded-[2.5rem] bg-[#C98A3C]/20 blur-2xl"></div>
                         <img
                             :src="heroImage"
-                            alt="Пример объекта недвижимости"
+                            alt="Пример объекта недвижимости из каталога ДомГид"
                             class="relative h-[430px] w-full rounded-[2rem] object-cover shadow-2xl"
+                            fetchpriority="high"
                             @error="handleImageError"
                         />
                         <div class="absolute -bottom-8 -left-10 rounded-2xl bg-white p-5 text-[#1C2B29] shadow-xl">
@@ -364,8 +383,10 @@ const steps = [
                         <div class="relative h-60 overflow-hidden">
                             <img
                                 :src="property.image || placeholderImage"
-                                :alt="property.title"
+                                :alt="`${property.title} — ${property.type} в городе ${property.city || 'не указан'}`"
                                 class="h-full w-full object-cover transition duration-500 group-hover:scale-105"
+                                loading="lazy"
+                                decoding="async"
                                 @error="handleImageError"
                             />
                             <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-[#0B3B36]">

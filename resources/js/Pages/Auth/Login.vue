@@ -5,7 +5,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
+import { Link, useForm } from '@inertiajs/vue3';
 
 defineProps({
     canResetPassword: {
@@ -31,7 +32,13 @@ const submit = () => {
 
 <template>
     <AuthInputLayout>
-        <Head title="Log in" />
+        <SeoHead
+            title="Вход в аккаунт"
+            description="Войдите в личный кабинет ДомГид, чтобы сохранять объявления и управлять профилем."
+            :noindex="true"
+        />
+
+        <h1 class="mb-6 text-2xl font-semibold text-gray-900">Вход в аккаунт</h1>
 
         <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
             {{ status }}

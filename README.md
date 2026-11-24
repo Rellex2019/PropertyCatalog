@@ -1,0 +1,1 @@
+Запуск SSR: npm run dev:ssr; в продакшене — npm run build && npm run build:ssr + php artisan inertia:start-ssr.

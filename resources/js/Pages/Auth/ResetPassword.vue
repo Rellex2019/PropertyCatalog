@@ -4,7 +4,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
+import { useForm } from '@inertiajs/vue3';
 
 const props = defineProps({
     email: {
@@ -33,7 +34,13 @@ const submit = () => {
 
 <template>
     <AuthInputLayout>
-        <Head title="Reset Password" />
+        <SeoHead
+            title="Новый пароль"
+            description="Установите новый пароль для аккаунта ДомГид."
+            :noindex="true"
+        />
+
+        <h1 class="mb-6 text-2xl font-semibold text-gray-900">Новый пароль</h1>
 
         <form @submit.prevent="submit">
             <div>

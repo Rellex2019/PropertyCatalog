@@ -2,6 +2,7 @@
 import { ref, computed } from 'vue';
 import { Link } from '@inertiajs/vue3';
 import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
+import SeoHead from '@/Components/SeoHead.vue';
 
 defineOptions({
     layout: AuthenticatedLayout
@@ -33,6 +34,46 @@ const images = computed(() => {
 const formattedPrice = computed(() => {
     return new Intl.NumberFormat('ru-RU').format(props.property.price);
 });
+
+const seoDescription = computed(() => {
+    const text = props.property.description || '';
+    const normalized = text.replace(/\s+/g, ' ').trim();
+
+    if (normalized.length <= 160) {
+        return normalized;
+    }
+
+    return `${normalized.slice(0, 157).trim()}...`;
+});
+
+const propertySchema = computed(() => ({
+    '@context': 'https://schema.org',
+    '@type': 'Product',
+    name: props.property.title,
+    description: seoDescription.value,
+    image: [mainImage.value],
+    sku: `property-${props.property.id}`,
+    address: {
+        '@type': 'PostalAddress',
+        addressLocality: props.property.city,
+        streetAddress: props.property.address,
+    },
+    offers: {
+        '@type': 'Offer',
+        price: props.property.price,
+        priceCurrency: 'RUB',
+        availability:
+            props.property.status === 'Продано'
+                ? 'https://schema.org/OutOfStock'
+                : 'https://schema.org/InStock',
+        url: props.propertyUrl,
+    },
+    additionalProperty: [
+        { '@type': 'PropertyValue', name: 'Площадь', value: `${props.property.area} м²` },
+        { '@type': 'PropertyValue', name: 'Комнаты', value: String(props.property.rooms) },
+        { '@type': 'PropertyValue', name: 'Тип', value: props.property.type },
+    ],
+}));
 
 // Текущее изображение для показа
 const currentImage = ref(mainImage.value);
@@ -108,13 +149,22 @@ const statusClass = computed(() => {
 </script>
 
 <template>
+    <SeoHead
+        :title="property.title"
+        :description="seoDescription"
+        :image="mainImage"
+        :canonical="propertyUrl"
+        type="product"
+        :schema="propertySchema"
+    />
+
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <!-- Хлебные крошки -->
-            <nav class="flex mb-4 text-sm text-gray-500">
-                <Link href="/" class="hover:text-gray-700">Главная</Link>
+            <nav aria-label="Хлебные крошки" class="flex mb-4 text-sm text-gray-500">
+                <Link :href="route('home')" class="hover:text-gray-700">Главная</Link>
                 <span class="mx-2">/</span>
-                <Link href="/catalog" class="hover:text-gray-700">Каталог</Link>
+                <Link :href="route('catalog.index')" class="hover:text-gray-700">Каталог</Link>
                 <span class="mx-2">/</span>
                 <span class="text-gray-900">{{ property.title }}</span>
             </nav>
@@ -127,8 +177,9 @@ const statusClass = computed(() => {
                     <div class="relative">
                         <img 
                             :src="currentImage" 
-                            :alt="property.title"
+                            :alt="`${property.title} — ${property.type} по адресу ${property.address}`"
                             class="w-full h-96 object-cover rounded-lg"
+                            fetchpriority="high"
                         />
                         
                         <!-- Бейджи -->
@@ -305,8 +356,10 @@ const statusClass = computed(() => {
                         <Link :href="route('catalog.show', similarProperty.id)">
                             <img 
                                 :src="similarProperty.image" 
-                                :alt="similarProperty.title"
+                                :alt="`${similarProperty.title} — ${similarProperty.type}`"
                                 class="w-full h-48 object-cover"
+                                loading="lazy"
+                                decoding="async"
                             />
                             <div class="p-4">
                                 <h3 class="text-lg font-semibold text-gray-900 mb-1">

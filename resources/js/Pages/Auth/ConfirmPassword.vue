@@ -3,8 +3,9 @@ import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import { useForm } from '@inertiajs/vue3';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
+import SeoHead from '@/Components/SeoHead.vue';
 const form = useForm({
     password: '',
 });
@@ -18,7 +19,13 @@ const submit = () => {
 
 <template>
     <AuthInputLayout>
-        <Head title="Confirm Password" />
+        <SeoHead
+            title="Подтверждение пароля"
+            description="Подтвердите пароль для доступа к защищённому разделу ДомГид."
+            :noindex="true"
+        />
+
+        <h1 class="mb-4 text-2xl font-semibold text-gray-900">Подтверждение пароля</h1>
 
         <div class="mb-4 text-sm text-gray-600">
             This is a secure area of the application. Please confirm your

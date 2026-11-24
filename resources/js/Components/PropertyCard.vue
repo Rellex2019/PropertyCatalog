@@ -20,8 +20,10 @@ const formatPrice = (price) => {
             <div class="relative h-48 overflow-hidden">
                 <img 
                     :src="property.image" 
-                    :alt="property.title"
+                    :alt="`${property.title} — ${property.type} в городе ${property.city || 'не указан'}`"
                     class="w-full h-full object-cover hover:scale-105 transition-transform duration-300"
+                    loading="lazy"
+                    decoding="async"
                 >
                 
                 <span class="absolute top-4 left-4 px-3 py-1 bg-indigo-600 text-white text-xs font-semibold rounded-full">

@@ -47,7 +47,10 @@ const showingNavigationDropdown = ref(false);
                             </div>
                         </div>
 
-                        <div class="hidden sm:ms-6 sm:flex sm:items-center">
+                        <div
+                            v-if="$page.props.auth.user"
+                            class="hidden sm:ms-6 sm:flex sm:items-center"
+                        >
                             <!-- Settings Dropdown -->
                             <div class="relative ms-3">
                                 <Dropdown align="right" width="48">
@@ -91,6 +94,24 @@ const showingNavigationDropdown = ref(false);
                                     </template>
                                 </Dropdown>
                             </div>
+                        </div>
+
+                        <div
+                            v-else
+                            class="hidden items-center gap-4 sm:ms-6 sm:flex"
+                        >
+                            <Link
+                                :href="route('login')"
+                                class="text-sm text-gray-600 hover:text-gray-900"
+                            >
+                                Войти
+                            </Link>
+                            <Link
+                                :href="route('register')"
+                                class="text-sm text-gray-600 hover:text-gray-900"
+                            >
+                                Регистрация
+                            </Link>
                         </div>
 
                         <!-- Hamburger -->
@@ -154,7 +175,10 @@ const showingNavigationDropdown = ref(false);
                     </div>
 
                     <!-- Responsive Settings Options -->
-                    <div class="border-t border-gray-200 pb-1 pt-4">
+                    <div
+                        v-if="$page.props.auth.user"
+                        class="border-t border-gray-200 pb-1 pt-4"
+                    >
                         <div class="px-4">
                             <div class="text-base font-medium text-gray-800">
                                 {{ $page.props.auth.user.name }}
@@ -174,6 +198,20 @@ const showingNavigationDropdown = ref(false);
                                 as="button"
                             >
                                 Выход
+                            </ResponsiveNavLink>
+                        </div>
+                    </div>
+
+                    <div
+                        v-else
+                        class="border-t border-gray-200 pb-1 pt-4"
+                    >
+                        <div class="space-y-1">
+                            <ResponsiveNavLink :href="route('login')">
+                                Войти
+                            </ResponsiveNavLink>
+                            <ResponsiveNavLink :href="route('register')">
+                                Регистрация
                             </ResponsiveNavLink>
                         </div>
                     </div>

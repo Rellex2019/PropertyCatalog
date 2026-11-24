@@ -4,7 +4,8 @@ import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import TextInput from '@/Components/TextInput.vue';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import SeoHead from '@/Components/SeoHead.vue';
+import { Link, useForm } from '@inertiajs/vue3';
 const form = useForm({
     name: '',
     email: '',
@@ -21,7 +22,13 @@ const submit = () => {
 
 <template>
     <AuthInputLayout>
-        <Head title="Register" />
+        <SeoHead
+            title="Регистрация"
+            description="Создайте аккаунт ДомГид, чтобы сохранять понравившиеся объекты недвижимости."
+            :noindex="true"
+        />
+
+        <h1 class="mb-6 text-2xl font-semibold text-gray-900">Регистрация</h1>
 
         <form @submit.prevent="submit">
             <div>
