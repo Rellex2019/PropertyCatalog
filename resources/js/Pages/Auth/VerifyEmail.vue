@@ -30,9 +30,9 @@ const verificationLinkSent = computed(
             :noindex="true"
         />
 
-        <h1 class="mb-4 text-2xl font-semibold text-gray-900">Подтверждение email</h1>
+        <h1 class="mb-4 text-2xl font-semibold text-brand">Подтверждение email</h1>
 
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="mb-4 text-sm text-brand-muted">
             Thanks for signing up! Before getting started, could you verify your
             email address by clicking on the link we just emailed to you? If you
             didn't receive the email, we will gladly send you another.
@@ -59,7 +59,7 @@ const verificationLinkSent = computed(
                     :href="route('logout')"
                     method="post"
                     as="button"
-                    class="rounded-md text-sm text-gray-600 underline hover:text-gray-900 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    class="rounded-md text-sm text-brand-muted underline hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
                     >Log Out</Link
                 >
             </div>

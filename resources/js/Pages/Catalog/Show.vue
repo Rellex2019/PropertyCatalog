@@ -247,11 +247,11 @@ const amenities = computed(() => {
 // Метка статуса
 const statusClass = computed(() => {
     const statusMap = {
-        'Продается': 'bg-green-500',
-        'Сдается': 'bg-blue-500',
-        'Продано': 'bg-red-500'
+        'Продается': 'bg-brand-teal',
+        'Сдается': 'bg-brand-gold text-brand',
+        'Продано': 'bg-red-500',
     };
-    return statusMap[props.property.status] || 'bg-gray-500';
+    return statusMap[props.property.status] || 'bg-brand-soft';
 });
 
 // Форматирование цены
@@ -270,15 +270,14 @@ const formattedPrice = computed(() => {
         :schema="propertySchema"
     />
 
-    <div class="py-6 px-4 sm:py-8 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <!-- Хлебные крошки -->
-            <nav aria-label="Хлебные крошки" class="flex flex-wrap items-center mb-4 text-xs sm:text-sm text-gray-500 gap-1">
-                <Link :href="route('home')" class="hover:text-gray-700">Главная</Link>
+    <div class="py-8 sm:py-12">
+        <div class="site-container">
+            <nav aria-label="Хлебные крошки" class="mb-6 flex flex-wrap items-center gap-1 text-xs text-brand-muted sm:text-sm">
+                <Link :href="route('home')" class="transition hover:text-brand">Главная</Link>
                 <span class="mx-1">/</span>
-                <Link :href="route('catalog.index')" class="hover:text-gray-700">Каталог</Link>
+                <Link :href="route('catalog.index')" class="transition hover:text-brand">Каталог</Link>
                 <span class="mx-1">/</span>
-                <span class="text-gray-900 truncate">{{ property.title }}</span>
+                <span class="truncate text-brand">{{ property.title }}</span>
             </nav>
 
             <!-- Плавающая кнопка "Каталог" -->
@@ -287,9 +286,9 @@ const formattedPrice = computed(() => {
                 class="fixed top-4 left-4 z-50 transition-all duration-300 transform"
                 :class="showCatalogButton ? 'translate-y-0 opacity-100' : '-translate-y-full opacity-0'"
             >
-                <Link 
-                    href="/catalog"
-                    class="flex items-center gap-2 px-4 py-2 bg-indigo-600 text-white rounded-lg shadow-lg hover:bg-indigo-700 transition-colors"
+                <Link
+                    :href="route('catalog.index')"
+                    class="site-btn-primary shadow-lg"
                 >
                     <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
@@ -299,12 +298,11 @@ const formattedPrice = computed(() => {
             </div>
 
             <!-- Основная карточка -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <!-- Галерея и информация -->
-                <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6 p-4 sm:p-6">
+            <div class="site-card overflow-hidden">
+                <div class="grid grid-cols-1 gap-6 p-5 sm:p-8 lg:grid-cols-2">
                     <!-- Левая колонка - Галерея -->
                     <div class="relative">
-                        <div class="relative overflow-hidden rounded-lg bg-gray-100" style="height: 400px;">
+                        <div class="relative h-[400px] overflow-hidden rounded-3xl bg-brand-sand">
                             <img 
                                 :src="currentImage" 
                                 :alt="`${property.title} — ${property.type} по адресу ${property.address}`"
@@ -318,12 +316,12 @@ const formattedPrice = computed(() => {
                             </div>
                             
                             <div class="absolute top-3 sm:top-4 left-3 sm:left-4 flex flex-col gap-1 sm:gap-2">
-                                <span class="px-2 sm:px-3 py-0.5 sm:py-1 bg-indigo-600 text-white text-[10px] sm:text-xs font-semibold rounded-full">
+                                <span class="px-2 sm:px-3 py-0.5 sm:py-1 bg-brand text-white text-[10px] sm:text-xs font-semibold rounded-full">
                                     {{ property.type }}
                                 </span>
                                 <span 
                                     v-if="property.is_featured"
-                                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-yellow-500 text-white text-[10px] sm:text-xs font-semibold rounded-full"
+                                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-brand-gold text-brand text-[10px] sm:text-xs font-semibold rounded-full"
                                 >
                                     ★ Избранное
                                 </span>
@@ -342,7 +340,7 @@ const formattedPrice = computed(() => {
                             @click="prevSlide"
                             @mouseenter="stopAutoplay"
                             @mouseleave="startAutoplay"
-                            class="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none"
+                            class="absolute left-1 sm:left-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-brand p-1.5 sm:p-2 rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none"
                             aria-label="Предыдущее фото"
                         >
                             <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -355,7 +353,7 @@ const formattedPrice = computed(() => {
                             @click="nextSlide"
                             @mouseenter="stopAutoplay"
                             @mouseleave="startAutoplay"
-                            class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-gray-800 p-1.5 sm:p-2 rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none"
+                            class="absolute right-1 sm:right-2 top-1/2 -translate-y-1/2 bg-white/80 hover:bg-white text-brand p-1.5 sm:p-2 rounded-full shadow-lg transition-all hover:scale-110 focus:outline-none"
                             aria-label="Следующее фото"
                         >
                             <svg class="w-4 h-4 sm:w-5 sm:h-5 lg:w-6 lg:h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -373,9 +371,9 @@ const formattedPrice = computed(() => {
                                 @mouseleave="startAutoplay"
                                 class="h-1.5 sm:h-2 rounded-full transition-all duration-300 focus:outline-none"
                                 :class="[
-                                    index === currentSlideIndex 
-                                        ? 'w-4 sm:w-8 bg-indigo-600' 
-                                        : 'w-1.5 sm:w-2 bg-gray-300 hover:bg-gray-400'
+                                    index === currentSlideIndex
+                                        ? 'w-4 sm:w-8 bg-brand'
+                                        : 'w-1.5 sm:w-2 bg-brand-line hover:bg-brand-soft'
                                 ]"
                                 :aria-label="`Перейти к фото ${index + 1}`"
                             />
@@ -391,9 +389,9 @@ const formattedPrice = computed(() => {
                                 @mouseleave="startAutoplay"
                                 class="flex-shrink-0 w-10 h-10 sm:w-14 sm:h-14 lg:w-16 lg:h-16 rounded-lg overflow-hidden border-2 transition-all duration-200 focus:outline-none"
                                 :class="[
-                                    index === currentSlideIndex 
-                                        ? 'border-indigo-600 ring-2 ring-indigo-200' 
-                                        : 'border-transparent hover:border-gray-300'
+                                    index === currentSlideIndex
+                                        ? 'border-brand ring-2 ring-brand-gold-light/60'
+                                        : 'border-transparent hover:border-brand-line'
                                 ]"
                             >
                                 <img 
@@ -408,11 +406,11 @@ const formattedPrice = computed(() => {
 
                     <!-- Правая колонка - Информация -->
                     <div>
-                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-gray-900 mb-1 sm:mb-2">
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-brand mb-1 sm:mb-2">
                             {{ property.title }}
                         </h1>
                         
-                        <p class="text-sm sm:text-base text-gray-600 mb-3 sm:mb-4 flex items-center gap-1 sm:gap-2">
+                        <p class="text-sm sm:text-base text-brand-muted mb-3 sm:mb-4 flex items-center gap-1 sm:gap-2">
                             <svg class="h-4 w-4 sm:h-5 sm:w-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -421,39 +419,39 @@ const formattedPrice = computed(() => {
                         </p>
 
                         <div class="flex items-center mb-4 sm:mb-6">
-                            <span class="text-2xl sm:text-3xl font-bold text-indigo-600">
+                            <span class="text-2xl sm:text-3xl font-bold text-brand">
                                 {{ formattedPrice }} ₽
                             </span>
                         </div>
 
                         <!-- Характеристики -->
                         <div class="grid grid-cols-2 gap-2 sm:gap-4 mb-4 sm:mb-6">
-                            <div class="p-2 sm:p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-[10px] sm:text-sm text-gray-500">Площадь</span>
+                            <div class="p-2 sm:p-3 bg-brand-cream rounded-xl">
+                                <span class="block text-[10px] sm:text-sm text-brand-muted">Площадь</span>
                                 <span class="text-base sm:text-lg font-semibold">{{ property.area }} м²</span>
                             </div>
-                            <div class="p-2 sm:p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-[10px] sm:text-sm text-gray-500">Комнат</span>
+                            <div class="p-2 sm:p-3 bg-brand-cream rounded-xl">
+                                <span class="block text-[10px] sm:text-sm text-brand-muted">Комнат</span>
                                 <span class="text-base sm:text-lg font-semibold">{{ property.rooms }}</span>
                             </div>
-                            <div class="p-2 sm:p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-[10px] sm:text-sm text-gray-500">Этаж</span>
+                            <div class="p-2 sm:p-3 bg-brand-cream rounded-xl">
+                                <span class="block text-[10px] sm:text-sm text-brand-muted">Этаж</span>
                                 <span class="text-base sm:text-lg font-semibold">{{ property.floor }} / {{ property.total_floors }}</span>
                             </div>
-                            <div class="p-2 sm:p-3 bg-gray-50 rounded-lg">
-                                <span class="block text-[10px] sm:text-sm text-gray-500">Дата</span>
+                            <div class="p-2 sm:p-3 bg-brand-cream rounded-xl">
+                                <span class="block text-[10px] sm:text-sm text-brand-muted">Дата</span>
                                 <span class="text-base sm:text-lg font-semibold">{{ new Date(property.published_at).toLocaleDateString('ru-RU') }}</span>
                             </div>
                         </div>
 
                         <!-- Удобства -->
                         <div v-if="amenities.length" class="mb-4 sm:mb-6">
-                            <h3 class="text-xs sm:text-sm font-medium text-gray-700 mb-1.5 sm:mb-2">Удобства:</h3>
+                            <h3 class="text-xs sm:text-sm font-medium text-brand mb-1.5 sm:mb-2">Удобства:</h3>
                             <div class="flex flex-wrap gap-1 sm:gap-2">
                                 <span 
                                     v-for="amenity in amenities" 
                                     :key="amenity"
-                                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-indigo-50 text-indigo-700 text-[10px] sm:text-xs rounded-full"
+                                    class="px-2 sm:px-3 py-0.5 sm:py-1 bg-brand-sand text-brand text-[10px] sm:text-xs rounded-full"
                                 >
                                     {{ amenity }}
                                 </span>
@@ -463,21 +461,21 @@ const formattedPrice = computed(() => {
                 </div>
 
                 <!-- Описание -->
-                <div class="px-4 sm:px-6 py-4 sm:py-6 border-t border-gray-100">
-                    <h2 class="text-lg sm:text-xl font-semibold text-gray-900 mb-3 sm:mb-4">Описание</h2>
-                    <p class="text-sm sm:text-base text-gray-700 leading-relaxed whitespace-pre-line">
+                <div class="px-4 sm:px-6 py-4 sm:py-6 border-t border-brand-line">
+                    <h2 class="text-lg sm:text-xl font-semibold text-brand mb-3 sm:mb-4">Описание</h2>
+                    <p class="text-sm sm:text-base text-brand leading-relaxed whitespace-pre-line">
                         {{ property.description }}
                     </p>
                 </div>
 
                 <!-- QR-код -->
-                <div class="px-4 sm:px-6 py-4 sm:py-6 border-t border-gray-100">
+                <div class="px-4 sm:px-6 py-4 sm:py-6 border-t border-brand-line">
                     <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-3 sm:mb-4 gap-2 sm:gap-0">
-                        <h2 class="text-lg sm:text-xl font-semibold text-gray-900">QR-код объекта</h2>
+                        <h2 class="text-lg sm:text-xl font-semibold text-brand">QR-код объекта</h2>
                         <button
                             v-if="isQrUnlocked"
                             @click="resetQR"
-                            class="text-xs sm:text-sm text-gray-500 hover:text-gray-700"
+                            class="text-xs sm:text-sm text-brand-muted hover:text-brand"
                         >
                             Скрыть QR-код
                         </button>
@@ -490,17 +488,17 @@ const formattedPrice = computed(() => {
                             @click="generateQR"
                             class="relative cursor-pointer group"
                         >
-                            <div class="w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 bg-gray-200 rounded-lg flex items-center justify-center relative overflow-hidden">
+                            <div class="w-36 h-36 sm:w-44 sm:h-44 lg:w-48 lg:h-48 bg-brand-sand rounded-xl flex items-center justify-center relative overflow-hidden">
                                 <div class="absolute inset-0 flex items-center justify-center">
-                                    <svg class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <svg class="w-16 h-16 sm:w-20 sm:h-20 lg:w-24 lg:h-24 text-brand-soft" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v1m6 11h2m-6 0h-2v4m0-11v3m0 0h.01M12 12h4.01M16 20h4M4 12h4m12 0h.01M5 8h2a1 1 0 001-1V5a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1zm12 0h2a1 1 0 001-1V5a1 1 0 00-1-1h-2a1 1 0 00-1 1v2a1 1 0 001 1zM5 20h2a1 1 0 001-1v-2a1 1 0 00-1-1H5a1 1 0 00-1 1v2a1 1 0 001 1z" />
                                     </svg>
                                 </div>
-                                <div class="absolute inset-0 bg-gray-300/50 backdrop-blur-sm"></div>
+                                <div class="absolute inset-0 bg-brand-sand/70 backdrop-blur-sm"></div>
                                 
                                 <div class="absolute inset-0 flex items-center justify-center">
                                     <div class="bg-white/90 p-2 sm:p-3 rounded-full shadow-lg">
-                                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-indigo-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <svg class="w-6 h-6 sm:w-8 sm:h-8 text-brand" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z" />
                                         </svg>
                                     </div>
@@ -512,7 +510,7 @@ const formattedPrice = computed(() => {
                                     </span>
                                 </div>
                             </div>
-                            <p class="mt-1.5 sm:mt-2 text-[10px] sm:text-sm text-gray-500 text-center">
+                            <p class="mt-1.5 sm:mt-2 text-[10px] sm:text-sm text-brand-muted text-center">
                                 Нажмите для генерации QR-кода
                             </p>
                         </div>
@@ -527,11 +525,11 @@ const formattedPrice = computed(() => {
                                     class="w-full h-full object-contain rounded-lg"
                                     :class="{ 'opacity-50': isDownloading }"
                                 />
-                                <div v-else-if="isQrLoading" class="w-full h-full flex items-center justify-center bg-gray-100 rounded-lg">
-                                    <div class="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 border-b-2 border-indigo-600"></div>
+                                <div v-else-if="isQrLoading" class="w-full h-full flex items-center justify-center bg-brand-sand rounded-xl">
+                                    <div class="animate-spin rounded-full h-8 w-8 sm:h-10 sm:w-10 lg:h-12 lg:w-12 border-b-2 border-brand"></div>
                                 </div>
                             </div>
-                            <p class="mt-1.5 sm:mt-2 text-[10px] sm:text-sm text-gray-500 text-center">
+                            <p class="mt-1.5 sm:mt-2 text-[10px] sm:text-sm text-brand-muted text-center">
                                 QR-код для просмотра объекта
                             </p>
                             
@@ -539,7 +537,7 @@ const formattedPrice = computed(() => {
                             <div class="flex flex-wrap items-center justify-center gap-2 mt-2 sm:mt-3">
                                 <button 
                                     @click="generateQR"
-                                    class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-indigo-600 hover:text-indigo-800"
+                                    class="px-3 sm:px-4 py-1.5 sm:py-2 text-xs sm:text-sm text-brand hover:text-brand-gold-dark"
                                 >
                                     Обновить
                                 </button>
@@ -548,7 +546,7 @@ const formattedPrice = computed(() => {
                                 <button 
                                     @click="downloadQR"
                                     :disabled="isDownloading || !qrCode"
-                                    class="inline-flex items-center gap-1.5 px-3 sm:px-4 py-1.5 sm:py-2 bg-green-600 text-white text-xs sm:text-sm rounded-md hover:bg-green-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                    class="site-btn-dark gap-1.5 px-3 py-1.5 text-xs disabled:opacity-50 disabled:cursor-not-allowed sm:px-4 sm:py-2 sm:text-sm"
                                 >
                                     <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" />
@@ -563,12 +561,12 @@ const formattedPrice = computed(() => {
 
             <!-- Похожие объекты -->
             <div v-if="similarProperties.length" class="mt-8 sm:mt-12">
-                <h2 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Похожие объекты</h2>
+                <h2 class="text-xl sm:text-2xl font-bold text-brand mb-4 sm:mb-6">Похожие объекты</h2>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                     <div 
                         v-for="similarProperty in similarProperties" 
                         :key="similarProperty.id"
-                        class="bg-white rounded-lg shadow overflow-hidden hover:shadow-lg transition-shadow"
+                        class="site-card site-card-hover overflow-hidden"
                     >
                         <Link :href="route('catalog.show', similarProperty.id)">
                             <img 
@@ -579,11 +577,11 @@ const formattedPrice = computed(() => {
                                 decoding="async"
                             />
                             <div class="p-3 sm:p-4">
-                                <h3 class="text-base sm:text-lg font-semibold text-gray-900 mb-0.5 sm:mb-1">
+                                <h3 class="text-base sm:text-lg font-semibold text-brand mb-0.5 sm:mb-1">
                                     {{ similarProperty.title }}
                                 </h3>
-                                <p class="text-xs sm:text-sm text-gray-500 mb-1.5 sm:mb-2 truncate">{{ similarProperty.address }}</p>
-                                <p class="text-base sm:text-lg font-bold text-indigo-600">
+                                <p class="text-xs sm:text-sm text-brand-muted mb-1.5 sm:mb-2 truncate">{{ similarProperty.address }}</p>
+                                <p class="text-base sm:text-lg font-bold text-brand">
                                     {{ new Intl.NumberFormat('ru-RU').format(similarProperty.price) }} ₽
                                 </p>
                             </div>

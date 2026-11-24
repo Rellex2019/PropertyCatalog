@@ -12,23 +12,17 @@ import SeoHead from '@/Components/SeoHead.vue';
 
     <AuthenticatedLayout>
         <template #header>
-            <h1
-                class="text-xl font-semibold leading-tight text-gray-800"
-            >
+            <h1 class="text-xl font-semibold leading-tight text-brand">
                 Личный кабинет
             </h1>
         </template>
 
-        <div class="py-12">
-            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
-                <div
-                    class="overflow-hidden bg-white shadow-sm sm:rounded-lg"
-                >
-                    <div class="p-6 text-gray-900">
-                        You're logged in!
-                    </div>
-                </div>
-            </div>
+        <div class="site-card p-8">
+            <p class="text-sm font-semibold uppercase tracking-[0.2em] text-brand-gold-dark">Аккаунт</p>
+            <h2 class="mt-3 text-2xl font-semibold text-brand">Вы вошли в аккаунт</h2>
+            <p class="mt-3 max-w-xl text-sm text-brand-muted">
+                Здесь будет информация о ваших объявлениях и сохранённых объектах.
+            </p>
         </div>
     </AuthenticatedLayout>
 </template>

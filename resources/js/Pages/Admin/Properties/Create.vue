@@ -135,42 +135,42 @@ const submit = () => {
 <template>
     <div>
         <div class="flex justify-between items-center mb-6">
-            <h1 class="text-2xl font-bold text-gray-900">Добавление объекта</h1>
+            <h1 class="text-2xl font-bold text-brand">Добавление объекта</h1>
             <Link :href="route('admin.properties.index')"
-                class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                class="px-4 py-2 bg-brand-soft text-white rounded-xl hover:bg-brand-muted">
                 Назад к списку
             </Link>
         </div>
 
-        <div class="bg-white rounded-lg shadow p-6">
+        <div class="site-card p-6">
             <form @submit.prevent="submit" enctype="multipart/form-data">
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <!-- Название -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Название *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Название *</label>
                         <input v-model="form.title" type="text" required
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Описание -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Описание</label>
+                        <label class="block text-sm font-medium text-brand-ink">Описание</label>
                         <textarea v-model="form.description" rows="4"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200"></textarea>
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold"></textarea>
                     </div>
 
                     <!-- Цена -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Цена *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Цена *</label>
                         <input v-model="form.price" type="number" required min="0" step="0.01"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Валюта -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Валюта</label>
+                        <label class="block text-sm font-medium text-brand-ink">Валюта</label>
                         <select v-model="form.currency"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
                             <option value="₽">₽</option>
                             <option value="$">$</option>
                             <option value="€">€</option>
@@ -179,51 +179,51 @@ const submit = () => {
 
                     <!-- Адрес -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Адрес *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Адрес *</label>
                         <input v-model="form.address" type="text" required
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Город -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Город *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Город *</label>
                         <input v-model="form.city" type="text" required
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Площадь -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Площадь (м²) *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Площадь (м²) *</label>
                         <input v-model="form.area" type="number" required min="0" step="0.1"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Комнаты -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Комнат *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Комнат *</label>
                         <input v-model="form.rooms" type="number" required min="0"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Этаж -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Этаж *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Этаж *</label>
                         <input v-model="form.floor" type="number" required min="0"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Всего этажей -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Всего этажей *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Всего этажей *</label>
                         <input v-model="form.total_floors" type="number" required min="1"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Тип -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Тип *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Тип *</label>
                         <select v-model="form.type" required
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
                             <option value="">Выберите тип</option>
                             <option v-for="type in props.types" :key="type" :value="type">
                                 {{ type }}
@@ -233,9 +233,9 @@ const submit = () => {
 
                     <!-- Статус -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Статус *</label>
+                        <label class="block text-sm font-medium text-brand-ink">Статус *</label>
                         <select v-model="form.status" required
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
                             <option v-for="status in props.statuses" :key="status" :value="status">
                                 {{ status }}
                             </option>
@@ -244,9 +244,9 @@ const submit = () => {
 
                     <!-- Удобства -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Удобства</label>
+                        <label class="block text-sm font-medium text-brand-ink">Удобства</label>
                         <input type="text" @input="checkFormating"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200">
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
                         <div v-if="errors.amenities" class="mt-1 text-sm text-red-600">
                             {{ errors.amenities }}
                         </div>
@@ -256,28 +256,28 @@ const submit = () => {
                     <div class="col-span-2 flex flex-wrap gap-6">
                         <label class="flex items-center">
                             <input v-model="form.is_featured" type="checkbox"
-                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
-                            <span class="ml-2 text-sm text-gray-700">Избранное</span>
+                                class="rounded border-brand-line text-brand shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            <span class="ml-2 text-sm text-brand-ink">Избранное</span>
                         </label>
                         <label class="flex items-center">
                             <input v-model="form.is_active" type="checkbox"
-                                class="rounded border-gray-300 text-indigo-600 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
-                            <span class="ml-2 text-sm text-gray-700">Активен</span>
+                                class="rounded border-brand-line text-brand shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            <span class="ml-2 text-sm text-brand-ink">Активен</span>
                         </label>
                     </div>
 
                     <!-- Дата публикации -->
                     <div>
-                        <label class="block text-sm font-medium text-gray-700">Дата публикации</label>
+                        <label class="block text-sm font-medium text-brand-ink">Дата публикации</label>
                         <input v-model="form.published_at" type="date"
-                            class="mt-1 w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200" />
+                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
                     </div>
 
                     <!-- Главное изображение -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Главное изображение</label>
+                        <label class="block text-sm font-medium text-brand-ink">Главное изображение</label>
                         <input type="file" accept="image/*"
-                            class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                            class="mt-1 block w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-sand file:text-brand hover:file:bg-brand-cream"
                             @change="handleImageUpload" />
                         <div v-if="imagePreview" class="mt-2">
                             <img :src="imagePreview" class="w-32 h-32 object-cover rounded border" />
@@ -286,9 +286,9 @@ const submit = () => {
 
                     <!-- Дополнительные изображения -->
                     <div class="col-span-2">
-                        <label class="block text-sm font-medium text-gray-700">Дополнительные изображения</label>
+                        <label class="block text-sm font-medium text-brand-ink">Дополнительные изображения</label>
                         <input type="file" accept="image/*" multiple
-                            class="mt-1 block w-full text-sm text-gray-500 file:mr-4 file:py-2 file:px-4 file:rounded-md file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100"
+                            class="mt-1 block w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-sand file:text-brand hover:file:bg-brand-cream"
                             @change="handleImagesUpload" />
                         <div v-if="imagesPreview.length" class="mt-2 flex flex-wrap gap-2">
                             <div v-for="(preview, index) in imagesPreview" :key="index" class="relative group">
@@ -307,13 +307,13 @@ const submit = () => {
                 </div>
 
                 <!-- Кнопки -->
-                <div class="flex justify-end gap-4 pt-6 mt-6 border-t border-gray-200">
+                <div class="flex justify-end gap-4 pt-6 mt-6 border-t border-brand-line">
                     <Link :href="route('admin.properties.index')"
-                        class="px-4 py-2 bg-gray-500 text-white rounded-md hover:bg-gray-600">
+                        class="px-4 py-2 bg-brand-soft text-white rounded-xl hover:bg-brand-muted">
                         Отмена
                     </Link>
                     <button type="submit" :disabled="submitting"
-                        class="px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700 disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
+                        class="px-4 py-2 bg-brand text-white rounded-xl hover:bg-brand-forest disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2">
                         <svg v-if="submitting" class="animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
                             <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4">
                             </circle>

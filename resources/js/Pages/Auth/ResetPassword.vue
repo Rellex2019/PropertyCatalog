@@ -40,7 +40,7 @@ const submit = () => {
             :noindex="true"
         />
 
-        <h1 class="mb-6 text-2xl font-semibold text-gray-900">Новый пароль</h1>
+        <h1 class="mb-6 text-2xl font-semibold text-brand">Новый пароль</h1>
 
         <form @submit.prevent="submit">
             <div>

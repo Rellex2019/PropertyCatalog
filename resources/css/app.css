@@ -1,3 +1,65 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer components {
+    .site-shell {
+        @apply min-h-screen bg-brand-cream text-brand-ink;
+    }
+
+    .site-container {
+        @apply mx-auto max-w-7xl px-4 sm:px-6 lg:px-8;
+    }
+
+    .site-card {
+        @apply rounded-3xl bg-white shadow-sm ring-1 ring-black/5;
+    }
+
+    .site-card-hover {
+        @apply transition duration-300 hover:-translate-y-1 hover:shadow-xl;
+    }
+
+    .site-btn {
+        @apply inline-flex items-center justify-center rounded-xl px-5 py-2.5 text-sm font-semibold transition;
+    }
+
+    .site-btn-primary {
+        @apply inline-flex items-center justify-center rounded-xl bg-brand-gold px-5 py-2.5 text-sm font-semibold text-brand transition hover:bg-brand-gold-light;
+    }
+
+    .site-btn-dark {
+        @apply inline-flex items-center justify-center rounded-xl bg-brand px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-brand-forest;
+    }
+
+    .site-btn-ghost {
+        @apply inline-flex items-center justify-center rounded-xl border border-white/25 px-5 py-2.5 text-sm font-semibold text-white transition hover:bg-white/10;
+    }
+
+    .site-btn-outline {
+        @apply inline-flex items-center justify-center rounded-xl border border-brand-line bg-white px-5 py-2.5 text-sm font-semibold text-brand transition hover:bg-brand-sand;
+    }
+
+    .site-input {
+        @apply w-full rounded-xl border-0 bg-brand-cream px-4 py-3 text-sm text-brand-ink placeholder:text-brand-soft focus:ring-2 focus:ring-brand-gold;
+    }
+
+    .site-label {
+        @apply mb-2 block text-xs font-semibold uppercase tracking-wider text-brand-soft;
+    }
+
+    .site-eyebrow {
+        @apply text-sm font-semibold uppercase tracking-[0.2em] text-brand-gold-dark;
+    }
+
+    .site-title {
+        @apply text-3xl font-semibold text-brand sm:text-4xl;
+    }
+
+    .site-badge {
+        @apply rounded-full px-3 py-1 text-xs font-semibold;
+    }
+
+    .site-link {
+        @apply text-sm font-semibold text-brand transition hover:text-brand-gold-dark;
+    }
+}

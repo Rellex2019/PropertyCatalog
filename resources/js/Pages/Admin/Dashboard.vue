@@ -14,34 +14,34 @@ const stats = computed(() => [
         name: 'Можно вывести различные данные сюда', 
         value: page.props.statistics?.total || 0,
         icon: '📊',
-        bgColor: 'bg-blue-100',
-        textColor: 'text-blue-600'
+        bgColor: 'bg-brand-sand',
+        textColor: 'text-brand'
     },
 ]);
 </script>
 
 <template>
     <div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-        <h1 class="text-xl sm:text-2xl font-bold text-gray-900 mb-4 sm:mb-6">Дашборд</h1>
+        <h1 class="text-xl sm:text-2xl font-bold text-brand mb-4 sm:mb-6">Дашборд</h1>
 
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-6">
             <div 
                 v-for="stat in stats" 
                 :key="stat.name"
-                class="bg-white overflow-hidden shadow rounded-lg hover:shadow-lg transition-shadow duration-300"
+                class="site-card site-card-hover"
             >
                 <div class="p-4 sm:p-6">
                     <div class="flex items-center">
                         <div class="flex-shrink-0">
-                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-lg flex items-center justify-center text-xl sm:text-2xl" :class="stat.bgColor">
+                            <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-2xl flex items-center justify-center text-xl sm:text-2xl" :class="stat.bgColor">
                                 {{ stat.icon }}
                             </div>
                         </div>
                         <div class="ml-3 sm:ml-4">
-                            <p class="text-xs sm:text-sm font-medium text-gray-500">
+                            <p class="text-xs sm:text-sm font-medium text-brand-muted">
                                 {{ stat.name }}
                             </p>
-                            <p class="text-xl sm:text-2xl font-semibold text-gray-900">
+                            <p class="text-xl sm:text-2xl font-semibold text-brand">
                                 {{ stat.value }}
                             </p>
                         </div>

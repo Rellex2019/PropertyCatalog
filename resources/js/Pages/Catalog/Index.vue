@@ -129,13 +129,14 @@ const updateFilters = () => {
         :schema="catalogSchema"
     />
 
-    <div class="py-8 px-4 sm:py-12 sm:px-6 lg:px-8">
-        <div class="max-w-7xl mx-auto">
-            <div class="mb-6 sm:mb-8">
-                <h1 class="text-2xl sm:text-3xl font-bold text-gray-900">
+    <div class="py-8 sm:py-12">
+        <div class="site-container">
+            <div class="mb-8">
+                <p class="site-eyebrow">Недвижимость</p>
+                <h1 class="site-title mt-3">
                     Каталог недвижимости
                 </h1>
-                <p class="mt-1 sm:mt-2 text-sm sm:text-base text-gray-600">
+                <p class="mt-3 text-sm text-brand-muted sm:text-base">
                     {{ statistics.total }} объектов в базе
                 </p>
             </div>
@@ -151,14 +152,14 @@ const updateFilters = () => {
             />
 
             <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-                <p class="text-sm sm:text-base text-gray-600">
-                    Найдено: <span class="font-semibold">{{ filteredProperties.length }}</span> объектов
+                <p class="text-sm text-brand-muted sm:text-base">
+                    Найдено: <span class="font-semibold text-brand">{{ filteredProperties.length }}</span> объектов
                 </p>
                 <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <label class="text-sm text-gray-600 whitespace-nowrap">Сортировать:</label>
-                    <select 
+                    <label class="whitespace-nowrap text-sm text-brand-muted">Сортировать:</label>
+                    <select
                         v-model="sortBy"
-                        class="w-full sm:w-auto rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50 text-sm sm:text-base"
+                        class="site-input w-full sm:w-auto"
                     >
                         <option value="newest">Сначала новые</option>
                         <option value="price-asc">Сначала дешевые</option>
@@ -167,7 +168,7 @@ const updateFilters = () => {
                 </div>
             </div>
 
-            <div v-if="filteredProperties.length" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
+            <div v-if="filteredProperties.length" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
                 <PropertyCard 
                     v-for="property in filteredProperties" 
                     :key="property.id"
@@ -175,15 +176,16 @@ const updateFilters = () => {
                 />
             </div>
 
-            <div v-else class="text-center py-8 sm:py-12">
-                <svg class="mx-auto h-10 w-10 sm:h-12 sm:w-12 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <div v-else class="site-card px-6 py-12 text-center">
+                <svg class="mx-auto h-10 w-10 text-brand-soft sm:h-12 sm:w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
                 </svg>
-                <h3 class="mt-2 text-lg font-medium text-gray-900">Ничего не найдено</h3>
-                <p class="mt-1 text-sm sm:text-base text-gray-500">Попробуйте изменить параметры поиска</p>
-                <button 
+                <h3 class="mt-2 text-xl font-semibold text-brand">Ничего не найдено</h3>
+                <p class="mt-2 text-sm text-brand-muted">Попробуйте изменить параметры поиска</p>
+                <button
+                    type="button"
+                    class="site-btn-primary mt-6"
                     @click="resetFilters"
-                    class="mt-4 inline-flex items-center px-3 sm:px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700"
                 >
                     Сбросить фильтры
                 </button>

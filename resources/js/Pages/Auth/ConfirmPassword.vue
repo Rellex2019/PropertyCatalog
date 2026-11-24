@@ -25,9 +25,9 @@ const submit = () => {
             :noindex="true"
         />
 
-        <h1 class="mb-4 text-2xl font-semibold text-gray-900">Подтверждение пароля</h1>
+        <h1 class="mb-4 text-2xl font-semibold text-brand">Подтверждение пароля</h1>
 
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="mb-4 text-sm text-brand-muted">
             This is a secure area of the application. Please confirm your
             password before continuing.
         </div>

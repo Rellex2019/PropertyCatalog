@@ -1,6 +1,7 @@
 <script setup>
 import { ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
+import SiteBrand from '@/Components/SiteBrand.vue';
 
 const page = usePage();
 const sidebarOpen = ref(false);
@@ -11,9 +12,7 @@ const navigation = [
     { name: 'Каталог', href: route('catalog.index'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
 ];
 
-const isActive = (href) => {
-    return page.url.startsWith(href);
-};
+const isActive = (href) => page.url.startsWith(href);
 
 const closeSidebar = () => {
     sidebarOpen.value = false;
@@ -25,93 +24,78 @@ const toggleSidebar = () => {
 </script>
 
 <template>
-    <div class="min-h-screen bg-gray-100">
-        <!-- Мобильное меню -->
+    <div class="site-shell">
         <div class="lg:hidden">
-            <!-- Оверлей -->
-            <div 
+            <div
                 v-if="sidebarOpen"
-                class="fixed inset-0 z-40 bg-gray-600 bg-opacity-75 transition-opacity"
+                class="fixed inset-0 z-40 bg-brand/60 backdrop-blur-sm transition-opacity"
                 @click="closeSidebar"
             ></div>
 
-            <!-- Сайдбар -->
-            <div 
+            <div
                 class="fixed inset-y-0 left-0 z-50 flex"
                 :class="sidebarOpen ? 'visible' : 'invisible'"
             >
-                <div 
-                    class="relative flex-1 flex flex-col max-w-xs w-full bg-white shadow-xl transform transition-transform duration-300 ease-in-out"
+                <div
+                    class="relative flex h-full w-full max-w-xs flex-col bg-brand shadow-2xl transform transition-transform duration-300 ease-in-out"
                     :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
                 >
-                    <!-- Кнопка закрытия -->
-                    <div class="absolute top-0 right-0 -mr-12 pt-2">
-                        <button 
+                    <div class="absolute right-0 top-0 -mr-12 pt-2">
+                        <button
                             v-if="sidebarOpen"
+                            type="button"
+                            aria-label="Закрыть меню"
+                            class="ml-1 flex h-10 w-10 items-center justify-center rounded-full text-white"
                             @click="closeSidebar"
-                            class="ml-1 flex items-center justify-center h-10 w-10 rounded-full focus:outline-none focus:ring-2 focus:ring-inset focus:ring-white"
                         >
-                            <span class="text-white text-2xl">✕</span>
+                            <span class="text-2xl">✕</span>
                         </button>
                     </div>
-                    
-                    <div class="flex-1 h-0 pt-5 pb-4 overflow-y-auto">
-                        <div class="flex-shrink-0 flex items-center px-4">
-                            <span class="text-2xl font-bold text-indigo-600">Админка</span>
-                        </div>
-                        <nav class="mt-5 px-2 space-y-1">
-                            <Link 
+
+                    <div class="flex-1 overflow-y-auto px-4 pb-4 pt-6">
+                        <SiteBrand subtitle="Панель управления" />
+                        <nav class="mt-8 space-y-1">
+                            <Link
                                 v-for="item in navigation"
                                 :key="item.name"
                                 :href="item.href"
+                                class="flex items-center rounded-xl px-3 py-3 text-base font-medium transition"
+                                :class="isActive(item.href)
+                                    ? 'bg-white/10 text-brand-gold-light'
+                                    : 'text-white/70 hover:bg-white/5 hover:text-white'"
                                 @click="closeSidebar"
-                                class="group flex items-center px-2 py-2 text-base font-medium rounded-md"
-                                :class="[
-                                    isActive(item.href) 
-                                        ? 'bg-gray-100 text-gray-900' 
-                                        : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                                ]"
                             >
-                                <svg class="mr-4 h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <svg class="mr-4 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon" />
                                 </svg>
                                 {{ item.name }}
                             </Link>
                         </nav>
                     </div>
-                    
-                    <div class="flex-shrink-0 flex border-t border-gray-200 p-4">
-                        <div class="flex items-center">
-                            <div class="ml-3">
-                                <p class="text-sm font-medium text-gray-700">{{ page.props.auth?.user?.name || 'Admin' }}</p>
-                                <Link :href="route('logout')" method="post" as="button" class="text-xs text-gray-500 hover:text-gray-700">
-                                    Выйти
-                                </Link>
-                            </div>
-                        </div>
+
+                    <div class="border-t border-white/10 p-4">
+                        <p class="text-sm font-medium text-white">{{ page.props.auth?.user?.name || 'Admin' }}</p>
+                        <Link :href="route('logout')" method="post" as="button" class="mt-1 text-xs text-white/60 hover:text-white">
+                            Выйти
+                        </Link>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- Десктопная навигация -->
-        <div class="hidden lg:flex lg:flex-col lg:w-64 lg:fixed lg:inset-y-0">
-            <div class="flex-1 flex flex-col min-h-0 bg-white border-r border-gray-200">
-                <div class="flex-1 flex flex-col pt-5 pb-4 overflow-y-auto">
-                    <div class="flex items-center flex-shrink-0 px-4">
-                        <span class="text-2xl font-bold text-indigo-600">Админка</span>
-                    </div>
-                    <nav class="mt-5 flex-1 px-2 space-y-1">
-                        <Link 
+        <div class="hidden lg:fixed lg:inset-y-0 lg:flex lg:w-64 lg:flex-col">
+            <div class="flex min-h-0 flex-1 flex-col border-r border-white/10 bg-brand">
+                <div class="flex-1 overflow-y-auto px-4 pb-4 pt-6">
+                    <SiteBrand subtitle="Панель управления" />
+                    <nav class="mt-8 space-y-1">
+                        <Link
                             v-for="item in navigation"
                             :key="item.name"
                             :href="item.href"
-                            class="group flex items-center px-2 py-2 text-sm font-medium rounded-md"
-                            :class="[
-                                isActive(item.href) 
-                                    ? 'bg-gray-100 text-gray-900' 
-                                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
-                            ]"
+                            class="flex items-center rounded-xl px-3 py-2.5 text-sm font-medium transition"
+                            :class="isActive(item.href)
+                                ? 'bg-white/10 text-brand-gold-light'
+                                : 'text-white/70 hover:bg-white/5 hover:text-white'"
                         >
                             <svg class="mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" :d="item.icon" />
@@ -120,64 +104,53 @@ const toggleSidebar = () => {
                         </Link>
                     </nav>
                 </div>
-                <div class="flex-shrink-0 flex border-t border-gray-200 p-4">
-                    <div class="flex items-center">
-                        <div class="ml-3">
-                            <p class="text-sm font-medium text-gray-700">{{ page.props.auth?.user?.name || 'Admin' }}</p>
-                            <Link :href="route('logout')" method="post" as="button" class="text-xs text-gray-500 hover:text-gray-700">
-                                Выйти
-                            </Link>
-                        </div>
-                    </div>
+                <div class="border-t border-white/10 p-4">
+                    <p class="text-sm font-medium text-white">{{ page.props.auth?.user?.name || 'Admin' }}</p>
+                    <Link :href="route('logout')" method="post" as="button" class="mt-1 text-xs text-white/60 hover:text-white">
+                        Выйти
+                    </Link>
                 </div>
             </div>
         </div>
 
-        <!-- Основной контент -->
-        <div class="lg:pl-64 flex flex-col flex-1">
-            <header class="bg-white shadow-sm lg:border-b border-gray-200">
-                <div class="px-4 sm:px-6 lg:px-8 py-4">
-                    <div class="flex items-center justify-between">
-                        <button 
+        <div class="flex flex-1 flex-col lg:pl-64">
+            <header class="border-b border-brand-line bg-white">
+                <div class="site-container flex items-center justify-between py-4">
+                    <div class="flex items-center gap-3">
+                        <button
+                            type="button"
+                            aria-label="Открыть меню"
+                            class="-ml-2 rounded-xl p-2 text-brand transition hover:bg-brand-sand lg:hidden"
                             @click="toggleSidebar"
-                            class="lg:hidden -ml-2 p-2 rounded-md text-gray-500 hover:text-gray-600 hover:bg-gray-100"
                         >
                             <span class="text-2xl">☰</span>
                         </button>
-                        <h1 class="text-xl sm:text-2xl font-semibold text-gray-900">
+                        <SiteBrand variant="dark" size="small" class="lg:hidden" />
+                        <h1 class="text-xl font-semibold text-brand sm:text-2xl">
                             <slot name="header">Админ панель</slot>
                         </h1>
                     </div>
+                    <Link :href="route('home')" class="site-link hidden sm:inline-flex">На сайт</Link>
                 </div>
             </header>
 
             <main class="flex-1">
-                <div class="py-4 sm:py-6">
-                    <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                        <div v-if="$page.props.flash?.success" class="mb-4 p-3 sm:p-4 bg-green-50 border-l-4 border-green-400 rounded">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <span class="text-green-400 text-lg">✓</span>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-green-700">{{ $page.props.flash.success }}</p>
-                                </div>
-                            </div>
+                <div class="site-container py-8 sm:py-10">
+                    <div v-if="$page.props.flash?.success" class="mb-4 rounded-2xl border-l-4 border-brand-teal bg-white p-4 shadow-sm">
+                        <div class="flex items-start gap-3">
+                            <span class="text-lg text-brand-teal">✓</span>
+                            <p class="text-sm text-brand-muted">{{ $page.props.flash.success }}</p>
                         </div>
-                        
-                        <div v-if="$page.props.flash?.error" class="mb-4 p-3 sm:p-4 bg-red-50 border-l-4 border-red-400 rounded">
-                            <div class="flex">
-                                <div class="flex-shrink-0">
-                                    <span class="text-red-400 text-lg">✕</span>
-                                </div>
-                                <div class="ml-3">
-                                    <p class="text-sm text-red-700">{{ $page.props.flash.error }}</p>
-                                </div>
-                            </div>
-                        </div>
-
-                        <slot />
                     </div>
+
+                    <div v-if="$page.props.flash?.error" class="mb-4 rounded-2xl border-l-4 border-red-500 bg-white p-4 shadow-sm">
+                        <div class="flex items-start gap-3">
+                            <span class="text-lg text-red-500">✕</span>
+                            <p class="text-sm text-brand-muted">{{ $page.props.flash.error }}</p>
+                        </div>
+                    </div>
+
+                    <slot />
                 </div>
             </main>
         </div>

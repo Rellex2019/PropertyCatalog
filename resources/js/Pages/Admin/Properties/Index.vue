@@ -23,11 +23,11 @@ const formatPrice = (price) => {
 
 const getStatusBadge = (status) => {
     const statusMap = {
-        'Продается': 'bg-green-100 text-green-800',
-        'Сдается': 'bg-blue-100 text-blue-800',
-        'Продано': 'bg-red-100 text-red-800'
+        'Продается': 'bg-brand-teal/20 text-brand-forest',
+        'Сдается': 'bg-brand-sand text-brand',
+        'Продано': 'bg-red-100 text-red-700'
     };
-    return statusMap[status] || 'bg-gray-100 text-gray-800';
+    return statusMap[status] || 'bg-brand-sand text-brand-ink';
 };
 
 const performSearch = () => {
@@ -64,10 +64,10 @@ const closeMenu = () => {
     <div class="px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
         <!-- Заголовок и кнопка добавления -->
         <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 sm:gap-0 mb-4 sm:mb-6">
-            <h1 class="text-xl sm:text-2xl font-bold text-gray-900">Управление недвижимостью</h1>
+            <h1 class="text-xl sm:text-2xl font-bold text-brand">Управление недвижимостью</h1>
             <Link 
                 :href="route('admin.properties.create')"
-                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-indigo-600 border border-transparent rounded-md font-semibold text-xs text-white uppercase tracking-widest hover:bg-indigo-700"
+                class="w-full sm:w-auto inline-flex items-center justify-center px-4 py-2 bg-brand border border-transparent rounded-xl font-semibold text-xs text-white uppercase tracking-widest hover:bg-brand-forest"
             >
                 + Добавить объект
             </Link>
@@ -75,37 +75,37 @@ const closeMenu = () => {
 
         <!-- Статистика -->
         <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 sm:gap-4 mb-4 sm:mb-6">
-            <div class="bg-white rounded-lg shadow p-3 sm:p-4">
-                <p class="text-[10px] sm:text-sm text-gray-500">Всего</p>
+            <div class="site-card p-3 sm:p-4">
+                <p class="text-[10px] sm:text-sm text-brand-muted">Всего</p>
                 <p class="text-lg sm:text-2xl font-bold">{{ statistics?.total || 0 }}</p>
             </div>
-            <div class="bg-white rounded-lg shadow p-3 sm:p-4">
-                <p class="text-[10px] sm:text-sm text-gray-500">Активных</p>
-                <p class="text-lg sm:text-2xl font-bold text-green-600">{{ statistics?.active || 0 }}</p>
+            <div class="site-card p-3 sm:p-4">
+                <p class="text-[10px] sm:text-sm text-brand-muted">Активных</p>
+                <p class="text-lg sm:text-2xl font-bold text-brand-forest">{{ statistics?.active || 0 }}</p>
             </div>
-            <div class="bg-white rounded-lg shadow p-3 sm:p-4">
-                <p class="text-[10px] sm:text-sm text-gray-500">В избранном</p>
-                <p class="text-lg sm:text-2xl font-bold text-yellow-600">{{ statistics?.featured || 0 }}</p>
+            <div class="site-card p-3 sm:p-4">
+                <p class="text-[10px] sm:text-sm text-brand-muted">В избранном</p>
+                <p class="text-lg sm:text-2xl font-bold text-brand-gold-dark">{{ statistics?.featured || 0 }}</p>
             </div>
-            <div class="bg-white rounded-lg shadow p-3 sm:p-4">
-                <p class="text-[10px] sm:text-sm text-gray-500">Типов</p>
+            <div class="site-card p-3 sm:p-4">
+                <p class="text-[10px] sm:text-sm text-brand-muted">Типов</p>
                 <p class="text-lg sm:text-2xl font-bold">{{ statistics?.types?.length || 0 }}</p>
             </div>
         </div>
 
         <!-- Поиск -->
-        <div class="bg-white rounded-lg shadow p-3 sm:p-4 mb-4 sm:mb-6">
+        <div class="site-card p-3 sm:p-4 mb-4 sm:mb-6">
             <div class="flex flex-col sm:flex-row gap-3 sm:gap-4">
                 <input 
                     v-model="search"
                     type="text"
                     placeholder="Поиск по названию или адресу..."
-                    class="flex-1 rounded-md border-gray-300 shadow-sm focus:border-indigo-300 focus:ring focus:ring-indigo-200 focus:ring-opacity-50"
+                    class="flex-1 rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold"
                     @keyup.enter="performSearch"
                 >
                 <button 
                     @click="performSearch"
-                    class="w-full sm:w-auto px-4 py-2 bg-indigo-600 text-white rounded-md hover:bg-indigo-700"
+                    class="w-full sm:w-auto px-4 py-2 bg-brand text-white rounded-xl hover:bg-brand-forest"
                 >
                     Найти
                 </button>
@@ -113,38 +113,38 @@ const closeMenu = () => {
         </div>
 
         <!-- Таблица и карточки -->
-        <div class="bg-white shadow overflow-hidden sm:rounded-lg">
+        <div class="site-card overflow-hidden">
             <!-- Десктопная таблица (скрыта на мобилках) -->
             <div class="hidden sm:block overflow-x-auto">
-                <table class="min-w-full divide-y divide-gray-200">
-                    <thead class="bg-gray-50">
+                <table class="min-w-full divide-y divide-brand-line">
+                    <thead class="bg-brand-cream">
                         <tr>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 ID
                             </th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 Изображение
                             </th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 Название
                             </th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 Цена
                             </th>
-                            <th class="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="hidden md:table-cell px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 Тип
                             </th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-left text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 Статус
                             </th>
-                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-gray-500 uppercase tracking-wider">
+                            <th class="px-3 sm:px-6 py-2 sm:py-3 text-right text-[10px] sm:text-xs font-medium text-brand-muted uppercase tracking-wider">
                                 Действия
                             </th>
                         </tr>
                     </thead>
-                    <tbody class="bg-white divide-y divide-gray-200">
+                    <tbody class="bg-white divide-y divide-brand-line">
                         <tr v-for="property in properties.data" :key="property.id">
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-brand">
                                 {{ property.id }}
                             </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
@@ -156,18 +156,18 @@ const closeMenu = () => {
                             </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4">
                             <Link :href="`/catalog/${property.id}`">
-                                <div class="text-xs sm:text-sm font-medium text-gray-900">
+                                <div class="text-xs sm:text-sm font-medium text-brand">
                                     {{ property.title }}
                                 </div>
-                                <div class="text-[10px] sm:text-sm text-gray-500">
+                                <div class="text-[10px] sm:text-sm text-brand-muted">
                                     {{ property.address }}
                                 </div>
                             </Link>
                             </td>
-                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-gray-900">
+                            <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm font-medium text-brand">
                                 {{ formatPrice(property.price) }} ₽
                             </td>
-                            <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-gray-900">
+                            <td class="hidden md:table-cell px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-xs sm:text-sm text-brand">
                                 {{ property.type }}
                             </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
@@ -180,7 +180,7 @@ const closeMenu = () => {
                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap text-right text-xs sm:text-sm font-medium">
                                 <Link 
                                     :href="`/admin/properties/${property.id}/edit`"
-                                    class="text-indigo-600 hover:text-indigo-900 mr-2 sm:mr-3"
+                                    class="text-brand hover:text-brand-forest mr-2 sm:mr-3"
                                 >
                                     Редактировать
                                 </Link>
@@ -197,11 +197,11 @@ const closeMenu = () => {
             </div>
 
             <!-- Мобильные карточки (показываем только на sm и меньше) -->
-            <div class="sm:hidden divide-y divide-gray-200">
+            <div class="sm:hidden divide-y divide-brand-line">
                 <div 
                     v-for="property in properties.data" 
                     :key="property.id"
-                    class="relative flex flex-col gap-2 px-4 py-4 hover:bg-gray-50"
+                    class="relative flex flex-col gap-2 px-4 py-4 hover:bg-brand-cream"
                 >
                     <div class="flex justify-between items-start">
                         <div class="flex items-center gap-3">
@@ -211,45 +211,45 @@ const closeMenu = () => {
                                 class="h-14 w-14 object-cover rounded"
                             >
                             <div>
-                                <div class="text-sm font-medium text-gray-900">
+                                <div class="text-sm font-medium text-brand">
                                     {{ property.title }}
                                 </div>
-                                <div class="text-xs text-gray-500">
+                                <div class="text-xs text-brand-muted">
                                     {{ property.address }}
                                 </div>
-                                <div class="text-sm font-bold text-gray-900 mt-1">
+                                <div class="text-sm font-bold text-brand mt-1">
                                     {{ formatPrice(property.price) }} ₽
                                 </div>
                             </div>
                         </div>
                         <button 
-                            class="text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg p-2 text-xl font-bold"
+                            class="text-brand-muted hover:text-brand hover:bg-brand-sand rounded-2xl p-2 text-xl font-bold"
                             @click.stop="toggleActionMenu(property.id)"
                         >
                             ⋮
                         </button>
                     </div>
-                    <div class="flex justify-between items-center pt-2 border-t border-gray-100">
+                    <div class="flex justify-between items-center pt-2 border-t border-brand-line">
                         <div class="flex items-center gap-2">
-                            <span class="text-xs text-gray-500">ID: {{ property.id }}</span>
+                            <span class="text-xs text-brand-muted">ID: {{ property.id }}</span>
                             <span 
                                 :class="['px-2 py-0.5 text-[10px] font-semibold rounded-full', getStatusBadge(property.status)]"
                             >
                                 {{ property.status }}
                             </span>
                         </div>
-                        <span class="text-xs text-gray-500">{{ property.type }}</span>
+                        <span class="text-xs text-brand-muted">{{ property.type }}</span>
                     </div>
 
                     <!-- Выпадающее меню действий (показывается при клике на три точки) -->
                     <div 
                         v-if="activeMenu === property.id"
-                        class="absolute right-4 top-16 z-20 w-48 bg-white rounded-lg shadow-xl border border-gray-200 py-1"
+                        class="absolute right-4 top-16 z-20 w-48 bg-white rounded-2xl shadow-xl border border-brand-line py-1"
                         @click.stop
                     >
                         <Link 
                             :href="`/admin/properties/${property.id}/edit`"
-                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-ink hover:bg-brand-sand hover:text-brand transition-colors"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" />
@@ -258,7 +258,7 @@ const closeMenu = () => {
                         </Link>
                         <Link 
                             :href="`/catalog/${property.id}`"
-                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-gray-700 hover:bg-indigo-50 hover:text-indigo-600 transition-colors"
+                            class="flex items-center gap-3 px-4 py-2.5 text-sm text-brand-ink hover:bg-brand-sand hover:text-brand transition-colors"
                         >
                             <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" />
@@ -266,7 +266,7 @@ const closeMenu = () => {
                             </svg>
                             Просмотр
                         </Link>
-                        <div class="border-t border-gray-100"></div>
+                        <div class="border-t border-brand-line"></div>
                         <button 
                             @click="deleteProperty(property)"
                             class="flex items-center gap-3 w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 transition-colors"
@@ -281,9 +281,9 @@ const closeMenu = () => {
             </div>
 
             <!-- Пагинация -->
-            <div v-if="properties.links" class="px-3 sm:px-6 py-3 sm:py-4 border-t border-gray-200">
+            <div v-if="properties.links" class="px-3 sm:px-6 py-3 sm:py-4 border-t border-brand-line">
                 <div class="flex flex-col sm:flex-row justify-between items-center gap-3 sm:gap-0">
-                    <div class="text-xs sm:text-sm text-gray-700">
+                    <div class="text-xs sm:text-sm text-brand-ink">
                         Показано {{ properties.from }} - {{ properties.to }} из {{ properties.total }}
                     </div>
                     <div class="flex flex-wrap justify-center gap-1 sm:gap-2">
@@ -293,7 +293,7 @@ const closeMenu = () => {
                             :href="link.url || '#'"
                             class="px-2 sm:px-3 py-0.5 sm:py-1 rounded text-[10px] sm:text-sm"
                             :class="[
-                                link.active ? 'bg-indigo-600 text-white' : 'bg-gray-100 hover:bg-gray-200',
+                                link.active ? 'bg-brand text-white' : 'bg-brand-sand hover:bg-brand-line',
                                 !link.url ? 'opacity-50 cursor-not-allowed' : ''
                             ]"
                             v-html="link.label"

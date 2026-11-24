@@ -2,6 +2,8 @@
 import { computed, ref, watch } from 'vue';
 import { Link, router, usePage } from '@inertiajs/vue3';
 import SeoHead from '@/Components/SeoHead.vue';
+import SiteHeader from '@/Components/SiteHeader.vue';
+import SiteFooter from '@/Components/SiteFooter.vue';
 
 const props = defineProps({
     featuredProperties: {
@@ -20,8 +22,6 @@ const props = defineProps({
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user ?? null);
-const mobileOpen = ref(false);
-const currentYear = new Date().getFullYear();
 const placeholderImage = 'https://via.placeholder.com/1200x800/0B3B36/F7F4EF?text=DomGid';
 const heroImage = ref(placeholderImage);
 
@@ -140,83 +140,10 @@ const homeSchema = computed(() => ({
     />
 
     <div class="min-h-screen bg-[#F7F4EF] text-[#1C2B29]">
-        <header class="fixed inset-x-0 top-0 z-50 border-b border-white/10 bg-[#0B3B36]/95 backdrop-blur">
-            <div class="mx-auto flex h-20 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-                <Link :href="route('home')" class="flex items-center gap-3 text-white">
-                    <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#C98A3C] text-[#0B3B36]">
-                        <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                            <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5M10 20v-6h4v6" />
-                        </svg>
-                    </span>
-                    <span class="text-lg font-semibold tracking-wide">Дом<span class="text-[#E2B36B]">Гид</span></span>
-                </Link>
-
-                <nav class="hidden items-center gap-8 text-sm text-white/70 md:flex">
-                    <a href="#featured" class="transition hover:text-white">Избранное</a>
-                    <a href="#how" class="transition hover:text-white">Как это работает</a>
-                    <a href="#cities" class="transition hover:text-white">Города</a>
-                    <Link :href="route('catalog.index')" class="transition hover:text-white">Каталог</Link>
-                </nav>
-
-                <div class="hidden items-center gap-3 md:flex">
-                    <template v-if="user">
-                        <Link
-                            :href="route('dashboard')"
-                            class="rounded-xl bg-[#C98A3C] px-5 py-2.5 text-sm font-semibold text-[#0B3B36] transition hover:bg-[#E2B36B]"
-                        >
-                            В кабинет
-                        </Link>
-                    </template>
-                    <template v-else>
-                        <Link :href="route('login')" class="rounded-xl px-4 py-2.5 text-sm text-white/80 transition hover:text-white">
-                            Войти
-                        </Link>
-                        <Link
-                            :href="route('register')"
-                            class="rounded-xl bg-[#C98A3C] px-5 py-2.5 text-sm font-semibold text-[#0B3B36] transition hover:bg-[#E2B36B]"
-                        >
-                            Регистрация
-                        </Link>
-                    </template>
-                </div>
-
-                <button
-                    type="button"
-                    aria-label="Открыть меню"
-                    class="rounded-xl border border-white/20 p-2 text-white md:hidden"
-                    @click="mobileOpen = !mobileOpen"
-                >
-                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
-                    </svg>
-                </button>
-            </div>
-
-            <div v-if="mobileOpen" class="border-t border-white/10 bg-[#0B3B36] px-4 pb-5 pt-2 md:hidden">
-                <a href="#featured" class="block py-3 text-white/80" @click="mobileOpen = false">Избранное</a>
-                <a href="#how" class="block py-3 text-white/80" @click="mobileOpen = false">Как это работает</a>
-                <a href="#cities" class="block py-3 text-white/80" @click="mobileOpen = false">Города</a>
-                <Link :href="route('catalog.index')" class="block py-3 text-white/80">Каталог</Link>
-                <div class="mt-3 flex gap-3 border-t border-white/10 pt-4">
-                    <template v-if="user">
-                        <Link :href="route('dashboard')" class="rounded-xl bg-[#C98A3C] px-5 py-2.5 text-sm font-semibold text-[#0B3B36]">
-                            В кабинет
-                        </Link>
-                    </template>
-                    <template v-else>
-                        <Link :href="route('login')" class="rounded-xl border border-white/20 px-5 py-2.5 text-sm text-white">
-                            Войти
-                        </Link>
-                        <Link :href="route('register')" class="rounded-xl bg-[#C98A3C] px-5 py-2.5 text-sm font-semibold text-[#0B3B36]">
-                            Регистрация
-                        </Link>
-                    </template>
-                </div>
-            </div>
-        </header>
+        <SiteHeader />
 
         <main>
-            <section class="relative overflow-hidden bg-[#0B3B36] pb-44 pt-32 text-white">
+            <section class="relative overflow-hidden bg-[#0B3B36] pb-44 pt-16 text-white sm:pt-20">
                 <div class="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-[#C98A3C]/10 blur-3xl"></div>
                 <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-[#2F8F7C]/20 blur-3xl"></div>
 
@@ -499,51 +426,6 @@ const homeSchema = computed(() => ({
             </section>
         </main>
 
-        <footer class="border-t border-[#E5DED2] bg-[#F1EDE6]">
-            <div class="mx-auto max-w-7xl px-4 py-12 sm:px-6 lg:px-8">
-                <div class="flex flex-col justify-between gap-10 md:flex-row">
-                    <div class="max-w-sm">
-                        <div class="flex items-center gap-3">
-                            <span class="grid h-10 w-10 place-items-center rounded-xl bg-[#0B3B36] text-[#E2B36B]">
-                                <svg class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                                    <path stroke-linecap="round" stroke-linejoin="round" d="M3 10.5 12 3l9 7.5M5.5 9.5V20h13V9.5M10 20v-6h4v6" />
-                                </svg>
-                            </span>
-                            <span class="text-lg font-semibold text-[#0B3B36]">Дом<span class="text-[#B37B2F]">Гид</span></span>
-                        </div>
-                        <p class="mt-4 text-sm leading-7 text-[#6B7B77]">
-                            Помогаем найти жильё, которое подходит по цене, месту и образу жизни.
-                        </p>
-                    </div>
-                    <div class="grid grid-cols-2 gap-12 sm:grid-cols-3">
-                        <div>
-                            <p class="text-sm font-semibold text-[#0B3B36]">Навигация</p>
-                            <div class="mt-4 space-y-3 text-sm text-[#6B7B77]">
-                                <Link :href="route('home')" class="block hover:text-[#0B3B36]">Главная</Link>
-                                <Link :href="route('catalog.index')" class="block hover:text-[#0B3B36]">Каталог</Link>
-                                <a href="#how" class="block hover:text-[#0B3B36]">Как это работает</a>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-[#0B3B36]">Объекты</p>
-                            <div class="mt-4 space-y-3 text-sm text-[#6B7B77]">
-                                <Link :href="`${route('catalog.index')}?type=Квартира`" class="block hover:text-[#0B3B36]">Квартиры</Link>
-                                <Link :href="`${route('catalog.index')}?type=Дом`" class="block hover:text-[#0B3B36]">Дома</Link>
-                                <Link :href="`${route('catalog.index')}?status=Сдается`" class="block hover:text-[#0B3B36]">Аренда</Link>
-                            </div>
-                        </div>
-                        <div>
-                            <p class="text-sm font-semibold text-[#0B3B36]">Аккаунт</p>
-                            <div class="mt-4 space-y-3 text-sm text-[#6B7B77]">
-                                <Link v-if="user" :href="route('dashboard')" class="block hover:text-[#0B3B36]">Кабинет</Link>
-                                <Link v-else :href="route('login')" class="block hover:text-[#0B3B36]">Войти</Link>
-                                <Link v-if="!user" :href="route('register')" class="block hover:text-[#0B3B36]">Регистрация</Link>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <p class="mt-10 border-t border-[#E0D9CE] pt-6 text-sm text-[#8A9692]">© {{ currentYear }} ДомГид. Все права защищены.</p>
-            </div>
-        </footer>
+        <SiteFooter />
     </div>
 </template>

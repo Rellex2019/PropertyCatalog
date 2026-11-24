@@ -30,9 +30,9 @@ const submit = () => {
             :noindex="true"
         />
 
-        <h1 class="mb-4 text-2xl font-semibold text-gray-900">Восстановление пароля</h1>
+        <h1 class="mb-4 text-2xl font-semibold text-brand">Восстановление пароля</h1>
 
-        <div class="mb-4 text-sm text-gray-600">
+        <div class="mb-4 text-sm text-brand-muted">
             Forgot your password? No problem. Just let us know your email
             address and we will email you a password reset link that will allow
             you to choose a new one.
