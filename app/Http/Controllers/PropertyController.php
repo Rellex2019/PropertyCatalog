@@ -8,6 +8,51 @@ use Inertia\Response;
 
 class PropertyController extends Controller
 {
+    public function home(): Response
+    {
+        $featured = Property::active()
+            ->featured()
+            ->latest('published_at')
+            ->take(3)
+            ->get();
+
+        if ($featured->count() < 3) {
+            $featured = $featured
+                ->merge(
+                    Property::active()
+                        ->whereNotIn('id', $featured->pluck('id'))
+                        ->latest('published_at')
+                        ->take(3 - $featured->count())
+                        ->get(),
+                )
+                ->values();
+        }
+
+        $popularCities = Property::active()
+            ->whereNotNull('city')
+            ->selectRaw('city, COUNT(*) as count')
+            ->groupBy('city')
+            ->orderByDesc('count')
+            ->limit(6)
+            ->get()
+            ->map(fn ($item) => [
+                'name' => $item->city,
+                'count' => (int) $item->count,
+            ]);
+
+        return Inertia::render('Home', [
+            'featuredProperties' => $featured,
+            'popularCities' => $popularCities,
+            'statistics' => [
+                'total' => Property::active()->count(),
+                'for_sale' => Property::active()->where('status', 'Продается')->count(),
+                'for_rent' => Property::active()->where('status', 'Сдается')->count(),
+                'featured' => Property::active()->featured()->count(),
+                'cities' => Property::active()->whereNotNull('city')->distinct()->count('city'),
+            ],
+        ]);
+    }
+
     public function index(): Response
     {
         $properties = Property::active()
