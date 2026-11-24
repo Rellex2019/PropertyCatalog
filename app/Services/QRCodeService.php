@@ -4,11 +4,11 @@ namespace App\Services;
 
 use App\Contracts\QRCodeGeneratorInterface;
 use Endroid\QrCode\Builder\Builder;
-use Endroid\QrCode\Writer\PngWriter;
 use Endroid\QrCode\Color\Color;
 use Endroid\QrCode\Encoding\Encoding;
 use Endroid\QrCode\ErrorCorrectionLevel;
 use Endroid\QrCode\RoundBlockSizeMode;
+use Endroid\QrCode\Writer\PngWriter;
 use Illuminate\Support\Facades\Log;
 
 class QRCodeService implements QRCodeGeneratorInterface
@@ -29,47 +29,48 @@ class QRCodeService implements QRCodeGeneratorInterface
     /**
      * Генерирует QR-код и возвращает base64 строку
      */
-    public function generate(string $data, int $size = null): string
+    public function generate(string $data, ?int $size = null): string
     {
         try {
             $size = $size ?? $this->config['size'];
-            
+
             $result = $this->buildQrCode($data, $size);
-            
+
             return $result->getDataUri();
         } catch (\Exception $e) {
-            Log::error('QR Code generation failed: ' . $e->getMessage(), [
+            Log::error('QR Code generation failed: '.$e->getMessage(), [
                 'file' => $e->getFile(),
-                'line' => $e->getLine()
+                'line' => $e->getLine(),
             ]);
-            throw new \RuntimeException('Не удалось сгенерировать QR-код: ' . $e->getMessage());
+            throw new \RuntimeException('Не удалось сгенерировать QR-код: '.$e->getMessage());
         }
     }
 
     /**
      * Генерирует QR-код и сохраняет в файл
      */
-    public function saveToFile(string $data, string $path, int $size = null): bool
+    public function saveToFile(string $data, string $path, ?int $size = null): bool
     {
         try {
             $size = $size ?? $this->config['size'];
-            
+
             $result = $this->buildQrCode($data, $size);
-            
+
             // Сохраняем в публичную директорию
             $fullPath = public_path($path);
-            
+
             // Создаем директорию, если её нет
             $directory = dirname($fullPath);
-            if (!is_dir($directory)) {
+            if (! is_dir($directory)) {
                 mkdir($directory, 0755, true);
             }
-            
+
             $result->saveToFile($fullPath);
-            
+
             return true;
         } catch (\Exception $e) {
-            Log::error('QR Code save failed: ' . $e->getMessage());
+            Log::error('QR Code save failed: '.$e->getMessage());
+
             return false;
         }
     }
@@ -81,7 +82,7 @@ class QRCodeService implements QRCodeGeneratorInterface
     {
         try {
             $builder = new Builder(
-                writer: new PngWriter(),
+                writer: new PngWriter,
                 writerOptions: [],
                 validateResult: false,
                 data: $data,
@@ -102,7 +103,7 @@ class QRCodeService implements QRCodeGeneratorInterface
 
             return $result->getDataUri();
         } catch (\Exception $e) {
-            Log::error('QR Code with logo generation failed: ' . $e->getMessage());
+            Log::error('QR Code with logo generation failed: '.$e->getMessage());
             throw new \RuntimeException('Не удалось сгенерировать QR-код с логотипом');
         }
     }
@@ -114,10 +115,10 @@ class QRCodeService implements QRCodeGeneratorInterface
     {
         try {
             $result = $this->buildQrCode($data, $size);
-            
+
             return $result->getString();
         } catch (\Exception $e) {
-            Log::error('QR Code download generation failed: ' . $e->getMessage());
+            Log::error('QR Code download generation failed: '.$e->getMessage());
             throw new \RuntimeException('Не удалось сгенерировать QR-код для скачивания');
         }
     }
@@ -129,12 +130,12 @@ class QRCodeService implements QRCodeGeneratorInterface
     {
         // Создаем URL для модели
         $url = route("{$modelType}.show", $modelId);
-        
+
         // Добавляем дополнительные данные, если нужно
-        if (!empty($additionalData)) {
-            $url .= '?' . http_build_query($additionalData);
+        if (! empty($additionalData)) {
+            $url .= '?'.http_build_query($additionalData);
         }
-        
+
         return $this->generate($url);
     }
 
@@ -145,7 +146,7 @@ class QRCodeService implements QRCodeGeneratorInterface
     {
         // ✅ Используем упрощенный Builder без цветов
         $builder = new Builder(
-            writer: new PngWriter(),
+            writer: new PngWriter,
             writerOptions: [],
             validateResult: false,
             data: $data,
@@ -181,12 +182,12 @@ class QRCodeService implements QRCodeGeneratorInterface
     {
         // ✅ Проверяем, что массив существует и имеет нужные индексы
         $color = $this->config['foreground'] ?? [0, 0, 0];
-        
+
         // Проверяем, что это массив и имеет 3 элемента
-        if (!is_array($color) || count($color) < 3) {
+        if (! is_array($color) || count($color) < 3) {
             return new Color(0, 0, 0);
         }
-        
+
         return new Color($color[0] ?? 0, $color[1] ?? 0, $color[2] ?? 0);
     }
 
@@ -197,12 +198,12 @@ class QRCodeService implements QRCodeGeneratorInterface
     {
         // ✅ Проверяем, что массив существует и имеет нужные индексы
         $color = $this->config['background'] ?? [255, 255, 255];
-        
+
         // Проверяем, что это массив и имеет 3 элемента
-        if (!is_array($color) || count($color) < 3) {
+        if (! is_array($color) || count($color) < 3) {
             return new Color(255, 255, 255);
         }
-        
+
         return new Color($color[0] ?? 255, $color[1] ?? 255, $color[2] ?? 255);
     }
 }

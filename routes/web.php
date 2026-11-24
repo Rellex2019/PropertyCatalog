@@ -11,7 +11,7 @@ Route::get('/sitemap.xml', [PropertyController::class, 'sitemap'])->name('sitema
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+})->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
@@ -24,5 +24,8 @@ Route::get('/catalog/{property}', [PropertyController::class, 'show'])->name('ca
 
 Route::post('/qr/generate', [QRController::class, 'generate'])->name('qr.generate');
 Route::get('/qr/download', [QRController::class, 'download'])->name('qr.download');
+Route::post('/qr/download-with-logo', [QRController::class, 'downloadWithLogo'])->name('qr.download-with-logo');
+Route::get('/qr/inline', [QRController::class, 'inline'])->name('qr.inline');
 
 require __DIR__.'/auth.php';
+require __DIR__.'/admin.php';

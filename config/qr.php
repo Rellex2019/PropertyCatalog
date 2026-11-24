@@ -1,4 +1,5 @@
 <?php
+
 // config/qr.php
 
 return [

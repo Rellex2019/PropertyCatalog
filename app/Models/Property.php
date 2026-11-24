@@ -43,7 +43,7 @@ class Property extends Model
     // Аксессор для форматирования цены
     public function getFormattedPriceAttribute(): string
     {
-        return number_format($this->price, 0, '.', ' ') . ' ' . $this->currency;
+        return number_format($this->price, 0, '.', ' ').' '.$this->currency;
     }
 
     // Аксессор для получения главного изображения
@@ -59,6 +59,7 @@ class Property extends Model
         if ($this->image) {
             array_unshift($images, $this->image);
         }
+
         return $images;
     }
 
