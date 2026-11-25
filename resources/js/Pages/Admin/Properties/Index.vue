@@ -148,8 +148,8 @@ const closeMenu = () => {
                                 {{ property.id }}
                             </td>
                             <td class="px-3 sm:px-6 py-3 sm:py-4 whitespace-nowrap">
-                                <img 
-                                    :src="property.image || 'https://via.placeholder.com/50x50/4F46E5/FFFFFF?text=No+Image'" 
+                                <img
+                                    :src="property.image || 'https://via.placeholder.com/50x50/15594F/F7F4EF?text=No+Image'"
                                     :alt="property.title"
                                     class="h-10 w-10 sm:h-12 sm:w-12 object-cover rounded"
                                 >
@@ -205,9 +205,9 @@ const closeMenu = () => {
                 >
                     <div class="flex justify-between items-start">
                         <div class="flex items-center gap-3">
-                            <img 
-                                :src="property.image || 'https://via.placeholder.com/50x50/4F46E5/FFFFFF?text=No+Image'" 
-                                :alt="property.title" 
+                            <img
+                                :src="property.image || 'https://via.placeholder.com/50x50/15594F/F7F4EF?text=No+Image'"
+                                :alt="property.title"
                                 class="h-14 w-14 object-cover rounded"
                             >
                             <div>

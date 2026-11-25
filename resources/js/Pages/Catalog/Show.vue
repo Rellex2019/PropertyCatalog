@@ -38,7 +38,7 @@ const allImages = computed(() => {
     }
     
     if (images.length === 0) {
-        images.push('https://via.placeholder.com/800x600/4F46E5/FFFFFF?text=No+Image');
+        images.push('https://via.placeholder.com/800x600/15594F/F7F4EF?text=No+Image');
     }
     
     return images;

@@ -120,7 +120,7 @@ onBeforeUnmount(() => {
 
         <div
             v-if="isFilterOpen"
-            class="fixed inset-0 z-40 bg-brand-ink/40 backdrop-blur-sm lg:hidden"
+            class="fixed inset-0 z-40 bg-brand/60 backdrop-blur-sm lg:hidden"
             @click="closeFilters"
         ></div>
 

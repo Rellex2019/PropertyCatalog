@@ -22,7 +22,7 @@ const props = defineProps({
 
 const page = usePage();
 const user = computed(() => page.props.auth?.user ?? null);
-const placeholderImage = 'https://via.placeholder.com/1200x800/0B3B36/F7F4EF?text=DomGid';
+const placeholderImage = 'https://via.placeholder.com/1200x800/15594F/F7F4EF?text=DomGid';
 const heroImage = ref(placeholderImage);
 
 watch(
@@ -144,8 +144,8 @@ const homeSchema = computed(() => ({
 
         <main>
             <section class="relative overflow-hidden bg-brand pb-44 pt-16 text-white sm:pt-20">
-                <div class="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full bg-brand-gold/10 blur-3xl"></div>
-                <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full bg-brand-teal/20 blur-3xl"></div>
+                <div class="pointer-events-none absolute -left-40 top-10 h-96 w-96 rounded-full site-glow-gold blur-3xl"></div>
+                <div class="pointer-events-none absolute -right-32 bottom-0 h-96 w-96 rounded-full site-glow-teal blur-3xl"></div>
 
                 <div class="relative mx-auto grid max-w-7xl items-center gap-14 px-4 sm:px-6 lg:grid-cols-2 lg:px-8">
                     <div>
@@ -192,7 +192,7 @@ const homeSchema = computed(() => ({
                     </div>
 
                     <div class="relative hidden lg:block">
-                        <div class="absolute -inset-6 rounded-[2.5rem] bg-brand-gold/20 blur-2xl"></div>
+                        <div class="absolute -inset-6 rounded-[2.5rem] site-glow-gold-strong blur-2xl"></div>
                         <img
                             :src="heroImage"
                             alt="Пример объекта недвижимости из каталога ДомГид"
@@ -400,7 +400,7 @@ const homeSchema = computed(() => ({
 
             <section class="mx-auto max-w-7xl px-4 pb-24 sm:px-6 lg:px-8">
                 <div class="relative overflow-hidden rounded-[2rem] bg-gradient-to-r from-brand to-brand-forest px-8 py-14 text-white sm:px-14">
-                    <div class="pointer-events-none absolute -right-16 -top-24 h-80 w-80 rounded-full bg-brand-gold/20 blur-3xl"></div>
+                    <div class="pointer-events-none absolute -right-16 -top-24 h-80 w-80 rounded-full site-glow-gold-strong blur-3xl"></div>
                     <div class="relative flex flex-col items-start justify-between gap-8 lg:flex-row lg:items-center">
                         <div>
                             <h2 class="text-3xl font-semibold sm:text-4xl">Готовы найти свой дом?</h2>

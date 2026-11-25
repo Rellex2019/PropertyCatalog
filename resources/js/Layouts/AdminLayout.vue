@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import SiteBrand from '@/Components/SiteBrand.vue';
+import ThemeToggle from '@/Components/ThemeToggle.vue';
 
 const page = usePage();
 const sidebarOpen = ref(false);
@@ -137,7 +138,10 @@ const toggleSidebar = () => {
                             <slot name="header">Админ панель</slot>
                         </h1>
                     </div>
-                    <Link :href="route('home')" class="site-link hidden sm:inline-flex">На сайт</Link>
+                    <div class="flex items-center gap-3">
+                        <ThemeToggle tone="default" />
+                        <Link :href="route('home')" class="site-link hidden sm:inline-flex">На сайт</Link>
+                    </div>
                 </div>
             </header>
 

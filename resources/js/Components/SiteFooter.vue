@@ -6,7 +6,7 @@ const currentYear = new Date().getFullYear();
 </script>
 
 <template>
-    <footer class="border-t border-brand-line bg-brand-sand">
+    <footer class="site-footer border-t border-brand-line bg-brand-sand">
         <div class="site-container py-12">
             <div class="flex flex-col justify-between gap-10 md:flex-row">
                 <div class="max-w-sm">

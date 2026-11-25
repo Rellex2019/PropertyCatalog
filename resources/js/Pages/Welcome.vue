@@ -42,7 +42,7 @@ function handleImageError() {
             aria-hidden="true"
         />
         <div
-            class="relative flex min-h-screen flex-col items-center justify-center selection:bg-brand-gold selection:text-white"
+            class="relative flex min-h-screen flex-col items-center justify-center selection:bg-brand-gold selection:text-on-accent"
         >
             <div class="relative w-full max-w-2xl px-6 lg:max-w-7xl">
                 <header
@@ -50,7 +50,7 @@ function handleImageError() {
                 >
                     <div class="flex lg:col-start-2 lg:justify-center">
                         <svg
-                            class="h-12 w-auto text-white lg:h-16 lg:text-brand-gold"
+                            class="h-12 w-auto text-brand-ink lg:h-16 lg:text-brand-gold"
                             viewBox="0 0 62 65"
                             fill="none"
                             xmlns="http://www.w3.org/2000/svg"

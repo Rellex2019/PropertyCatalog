@@ -2,6 +2,7 @@
 import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import SiteBrand from '@/Components/SiteBrand.vue';
+import ThemeToggle from '@/Components/ThemeToggle.vue';
 
 const page = usePage();
 const mobileOpen = ref(false);
@@ -40,6 +41,7 @@ const navigation = computed(() => [
             </nav>
 
             <div class="hidden items-center gap-3 md:flex">
+                <ThemeToggle />
                 <template v-if="user">
                     <Link :href="route('dashboard')" class="site-btn-primary">
                         В кабинет
@@ -63,16 +65,19 @@ const navigation = computed(() => [
                 </template>
             </div>
 
-            <button
-                type="button"
-                aria-label="Открыть меню"
-                class="rounded-xl border border-white/20 p-2 text-white md:hidden"
-                @click="mobileOpen = !mobileOpen"
-            >
-                <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
-                    <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
-                </svg>
-            </button>
+            <div class="flex items-center gap-2 md:hidden">
+                <ThemeToggle />
+                <button
+                    type="button"
+                    aria-label="Открыть меню"
+                    class="rounded-xl border border-white/20 p-2 text-white"
+                    @click="mobileOpen = !mobileOpen"
+                >
+                    <svg class="h-6 w-6" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                        <path stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16" />
+                    </svg>
+                </button>
+            </div>
         </div>
 
         <div v-if="mobileOpen" class="border-t border-white/10 bg-brand px-4 pb-5 pt-2 md:hidden">
