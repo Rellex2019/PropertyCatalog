@@ -1,5 +1,6 @@
 <script setup>
 import { computed } from 'vue';
+import AuthNotice from '@/Components/AuthNotice.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { Link, useForm } from '@inertiajs/vue3';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
@@ -32,19 +33,16 @@ const verificationLinkSent = computed(
 
         <h1 class="mb-4 text-2xl font-semibold text-brand">Подтверждение email</h1>
 
-        <div class="mb-4 text-sm text-brand-muted">
-            Thanks for signing up! Before getting started, could you verify your
-            email address by clicking on the link we just emailed to you? If you
-            didn't receive the email, we will gladly send you another.
-        </div>
+        <p class="mb-4 text-sm text-brand-muted">
+            Подтвердите email по ссылке из письма. Если письмо не пришло — отправим новую ссылку.
+        </p>
 
-        <div
-            class="mb-4 text-sm font-medium text-green-600"
+        <AuthNotice
             v-if="verificationLinkSent"
-        >
-            A new verification link has been sent to the email address you
-            provided during registration.
-        </div>
+            message="Новая ссылка отправлена на ваш email."
+            tone="success"
+            class="mb-4"
+        />
 
         <form @submit.prevent="submit">
             <div class="mt-4 flex items-center justify-between">
@@ -52,7 +50,7 @@ const verificationLinkSent = computed(
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Resend Verification Email
+                    Отправить ссылку ещё раз
                 </PrimaryButton>
 
                 <Link
@@ -60,7 +58,7 @@ const verificationLinkSent = computed(
                     method="post"
                     as="button"
                     class="rounded-md text-sm text-brand-muted underline hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
-                    >Log Out</Link
+                    >Выйти</Link
                 >
             </div>
         </form>

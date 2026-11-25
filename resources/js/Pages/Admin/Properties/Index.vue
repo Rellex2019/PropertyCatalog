@@ -100,7 +100,7 @@ const closeMenu = () => {
                     v-model="search"
                     type="text"
                     placeholder="Поиск по названию или адресу..."
-                    class="flex-1 rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold"
+                    class="site-input flex-1"
                     @keyup.enter="performSearch"
                 >
                 <button 

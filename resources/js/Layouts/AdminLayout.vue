@@ -1,16 +1,23 @@
 <script setup>
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { Link, usePage } from '@inertiajs/vue3';
 import SiteBrand from '@/Components/SiteBrand.vue';
 
 const page = usePage();
 const sidebarOpen = ref(false);
 
-const navigation = [
+const isMainAdmin = computed(() => (
+    page.props.auth?.is_main_admin || page.props.auth?.user?.role === 'main_admin'
+));
+
+const navigation = computed(() => [
     { name: 'Главная', href: route('admin.dashboard'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
     { name: 'Недвижимость', href: route('admin.properties.index'), icon: 'M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4' },
+    ...(isMainAdmin.value
+        ? [{ name: 'Пользователи', href: route('admin.users.index'), icon: 'M16 21v-2a4 4 0 00-4-4H6a4 4 0 00-4 4v2m14-10a4 4 0 11-8 0 4 4 0 018 0zm10 10v-2a4 4 0 00-3-3.87M22 21v-2a4 4 0 00-3-3.87' }]
+        : []),
     { name: 'Каталог', href: route('catalog.index'), icon: 'M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6' },
-];
+]);
 
 const isActive = (href) => page.url.startsWith(href);
 

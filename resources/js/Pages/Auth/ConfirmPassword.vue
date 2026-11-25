@@ -1,4 +1,5 @@
 <script setup>
+import FieldHint from '@/Components/FieldHint.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -6,6 +7,7 @@ import TextInput from '@/Components/TextInput.vue';
 import { useForm } from '@inertiajs/vue3';
 import AuthInputLayout from '@/Layouts/AuthInputLayout.vue';
 import SeoHead from '@/Components/SeoHead.vue';
+
 const form = useForm({
     password: '',
 });
@@ -27,14 +29,13 @@ const submit = () => {
 
         <h1 class="mb-4 text-2xl font-semibold text-brand">Подтверждение пароля</h1>
 
-        <div class="mb-4 text-sm text-brand-muted">
-            This is a secure area of the application. Please confirm your
-            password before continuing.
-        </div>
+        <p class="mb-4 text-sm text-brand-muted">
+            Это защищённый раздел. Введите пароль, чтобы продолжить.
+        </p>
 
         <form @submit.prevent="submit">
             <div>
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Пароль" />
                 <TextInput
                     id="password"
                     type="password"
@@ -44,6 +45,9 @@ const submit = () => {
                     autocomplete="current-password"
                     autofocus
                 />
+                <FieldHint :show="form.password.length > 0">
+                    Введите пароль от своего аккаунта.
+                </FieldHint>
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
@@ -53,7 +57,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Confirm
+                    Подтвердить
                 </PrimaryButton>
             </div>
         </form>

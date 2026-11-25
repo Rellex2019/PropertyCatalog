@@ -1,4 +1,5 @@
 <script setup>
+import FieldHint from '@/Components/FieldHint.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -40,7 +41,8 @@ const submit = () => {
             :noindex="true"
         />
 
-        <h1 class="mb-6 text-2xl font-semibold text-brand">Новый пароль</h1>
+        <h1 class="mb-4 text-2xl font-semibold text-brand">Новый пароль</h1>
+        <p class="mb-6 text-sm text-brand-muted">Придумайте новый пароль и подтвердите его.</p>
 
         <form @submit.prevent="submit">
             <div>
@@ -60,7 +62,7 @@ const submit = () => {
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
+                <InputLabel for="password" value="Пароль" />
 
                 <TextInput
                     id="password"
@@ -71,13 +73,17 @@ const submit = () => {
                     autocomplete="new-password"
                 />
 
+                <FieldHint :show="form.password.length > 0">
+                    Не менее 8 символов.
+                </FieldHint>
+
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4">
                 <InputLabel
                     for="password_confirmation"
-                    value="Confirm Password"
+                    value="Подтверждение пароля"
                 />
 
                 <TextInput
@@ -88,6 +94,10 @@ const submit = () => {
                     required
                     autocomplete="new-password"
                 />
+
+                <FieldHint :show="form.password_confirmation.length > 0">
+                    Повторите новый пароль.
+                </FieldHint>
 
                 <InputError
                     class="mt-2"
@@ -100,7 +110,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Reset Password
+                    Сохранить пароль
                 </PrimaryButton>
             </div>
         </form>

@@ -6,13 +6,17 @@ import SiteBrand from '@/Components/SiteBrand.vue';
 const page = usePage();
 const mobileOpen = ref(false);
 const user = computed(() => page.props.auth?.user ?? null);
+const canAccessAdmin = computed(() => (
+    page.props.auth?.can_access_admin
+    || ['manager', 'admin', 'main_admin'].includes(user.value?.role)
+));
 
 const navigation = computed(() => [
     { label: 'Главная', href: route('home'), active: page.url === '/' },
     { label: 'Каталог', href: route('catalog.index'), active: page.url.startsWith('/catalog') },
     { label: 'Как это работает', href: `${route('home')}#how`, active: false },
     { label: 'Города', href: `${route('home')}#cities`, active: false },
-    ...(user.value
+    ...(canAccessAdmin.value
         ? [{ label: 'Админка', href: route('admin.dashboard'), active: page.url.startsWith('/admin') }]
         : []),
 ]);
@@ -39,6 +43,14 @@ const navigation = computed(() => [
                 <template v-if="user">
                     <Link :href="route('dashboard')" class="site-btn-primary">
                         В кабинет
+                    </Link>
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                        as="button"
+                        class="rounded-xl border border-white/25 px-4 py-2.5 text-sm text-white/80 transition hover:bg-white/10 hover:text-white"
+                    >
+                        Выйти
                     </Link>
                 </template>
                 <template v-else>
@@ -78,6 +90,15 @@ const navigation = computed(() => [
                 <template v-if="user">
                     <Link :href="route('dashboard')" class="site-btn-primary" @click="mobileOpen = false">
                         В кабинет
+                    </Link>
+                    <Link
+                        :href="route('logout')"
+                        method="post"
+                        as="button"
+                        class="site-btn-ghost"
+                        @click="mobileOpen = false"
+                    >
+                        Выйти
                     </Link>
                 </template>
                 <template v-else>

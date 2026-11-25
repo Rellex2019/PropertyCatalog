@@ -167,7 +167,8 @@ onMounted(() => {
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-brand">Редактирование объекта #{{ property.id }}</h1>
             <Link :href="route('admin.properties.index')"
-                class="px-4 py-2 bg-brand-soft text-white rounded-xl hover:bg-brand-muted">
+                class="site-btn-outline"
+>
                 Назад к списку
             </Link>
         </div>
@@ -179,28 +180,32 @@ onMounted(() => {
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-brand-ink">Название *</label>
                         <input v-model="form.title" type="text" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Описание -->
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-brand-ink">Описание</label>
                         <textarea v-model="form.description" rows="4"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold"></textarea>
+                            class="site-input mt-1"
+></textarea>
                     </div>
 
                     <!-- Цена -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Цена *</label>
                         <input v-model="form.price" type="number" required min="0" step="0.01"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Валюта -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Валюта</label>
                         <select v-model="form.currency"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                             <option value="₽">₽</option>
                             <option value="$">$</option>
                             <option value="€">€</option>
@@ -211,49 +216,56 @@ onMounted(() => {
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Адрес *</label>
                         <input v-model="form.address" type="text" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Город -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Город *</label>
                         <input v-model="form.city" type="text" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Площадь -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Площадь (м²) *</label>
                         <input v-model="form.area" type="number" required min="0" step="0.1"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Комнаты -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Комнат *</label>
                         <input v-model="form.rooms" type="number" required min="0"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Этаж -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Этаж *</label>
                         <input v-model="form.floor" type="number" required min="0"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Всего этажей -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Всего этажей *</label>
                         <input v-model="form.total_floors" type="number" required min="1"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Тип -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Тип *</label>
                         <select v-model="form.type" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                             <option value="">Выберите тип</option>
                             <option v-for="type in props.types" :key="type" :value="type">
                                 {{ type }}
@@ -265,7 +277,8 @@ onMounted(() => {
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Статус *</label>
                         <select v-model="form.status" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                             <option v-for="status in props.statuses" :key="status" :value="status">
                                 {{ status }}
                             </option>
@@ -276,7 +289,8 @@ onMounted(() => {
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-brand-ink">Удобства</label>
                         <input type="text" :value="amenitiesForm" @input="checkFormating"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                         <div v-if="errors.amenities" class="mt-1 text-sm text-red-600">
                             {{ errors.amenities }}
                         </div>
@@ -301,7 +315,8 @@ onMounted(() => {
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Дата публикации</label>
                         <input v-model="form.published_at" type="date"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+ />
                     </div>
 
                     <!-- Текущие изображения -->
@@ -358,7 +373,8 @@ onMounted(() => {
                 <!-- Кнопки -->
                 <div class="flex justify-end gap-4 pt-6 mt-6 border-t border-brand-line">
                     <Link :href="route('admin.properties.index')"
-                        class="px-4 py-2 bg-brand-soft text-white rounded-xl hover:bg-brand-muted">
+                        class="site-btn-outline"
+>
                         Отмена
                     </Link>
                     <button type="submit" :disabled="submitting"

@@ -1,4 +1,6 @@
 <script setup>
+import AuthNotice from '@/Components/AuthNotice.vue';
+import FieldHint from '@/Components/FieldHint.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -32,18 +34,11 @@ const submit = () => {
 
         <h1 class="mb-4 text-2xl font-semibold text-brand">Восстановление пароля</h1>
 
-        <div class="mb-4 text-sm text-brand-muted">
-            Forgot your password? No problem. Just let us know your email
-            address and we will email you a password reset link that will allow
-            you to choose a new one.
-        </div>
+        <p class="mb-4 text-sm text-brand-muted">
+            Забыли пароль? Укажите email — отправим ссылку, по которой можно установить новый.
+        </p>
 
-        <div
-            v-if="status"
-            class="mb-4 text-sm font-medium text-green-600"
-        >
-            {{ status }}
-        </div>
+        <AuthNotice v-if="status" :message="status" tone="success" class="mb-4" />
 
         <form @submit.prevent="submit">
             <div>
@@ -59,6 +54,10 @@ const submit = () => {
                     autocomplete="username"
                 />
 
+                <FieldHint :show="form.email.length > 0">
+                    Письмо придёт на адрес, указанный при регистрации.
+                </FieldHint>
+
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
@@ -67,7 +66,7 @@ const submit = () => {
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Email Password Reset Link
+                    Отправить ссылку
                 </PrimaryButton>
             </div>
         </form>

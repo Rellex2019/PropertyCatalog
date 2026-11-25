@@ -2,6 +2,7 @@
 import { ref, reactive } from 'vue';
 import { Link, router } from '@inertiajs/vue3';
 import AdminLayout from '@/Layouts/AdminLayout.vue';
+import FieldHint from '@/Components/FieldHint.vue';
 
 defineOptions({
     layout: AdminLayout
@@ -37,6 +38,7 @@ const form = reactive({
 
 const submitting = ref(false);
 const errors = ref({});
+const amenitiesInput = ref('');
 const imagePreview = ref(null);
 const imagesPreview = ref([]);
 
@@ -137,7 +139,8 @@ const submit = () => {
         <div class="flex justify-between items-center mb-6">
             <h1 class="text-2xl font-bold text-brand">Добавление объекта</h1>
             <Link :href="route('admin.properties.index')"
-                class="px-4 py-2 bg-brand-soft text-white rounded-xl hover:bg-brand-muted">
+                class="site-btn-outline"
+>
                 Назад к списку
             </Link>
         </div>
@@ -149,104 +152,166 @@ const submit = () => {
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-brand-ink">Название *</label>
                         <input v-model="form.title" type="text" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, 2-к. квартира на Тверской"
+ />
+                        <FieldHint :show="form.title.length > 0">
+                            Коротко и понятно — это заголовок в каталоге.
+                        </FieldHint>
                     </div>
 
                     <!-- Описание -->
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-brand-ink">Описание</label>
                         <textarea v-model="form.description" rows="4"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold"></textarea>
+                            class="site-input mt-1"
+                            placeholder="Опишите планировку, состояние и близость к инфраструктуре"
+></textarea>
+                        <FieldHint :show="form.description.length > 0">
+                            Пара предложений о главном — этого достаточно.
+                        </FieldHint>
                     </div>
 
                     <!-- Цена -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Цена *</label>
                         <input v-model="form.price" type="number" required min="0" step="0.01"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, 12500000"
+ />
+                        <FieldHint :show="form.price.length > 0">
+                            Укажите полную стоимость без пробелов.
+                        </FieldHint>
                     </div>
 
                     <!-- Валюта -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Валюта</label>
                         <select v-model="form.currency"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                             <option value="₽">₽</option>
                             <option value="$">$</option>
                             <option value="€">€</option>
                         </select>
+                        <FieldHint :show="true">
+                            Валюта, в которой указана цена.
+                        </FieldHint>
                     </div>
 
                     <!-- Адрес -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Адрес *</label>
                         <input v-model="form.address" type="text" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Улица, дом"
+ />
+                        <FieldHint :show="form.address.length > 0">
+                            Улица и номер дома.
+                        </FieldHint>
                     </div>
 
                     <!-- Город -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Город *</label>
                         <input v-model="form.city" type="text" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, Москва"
+ />
+                        <FieldHint :show="form.city.length > 0">
+                            Город используется в фильтре каталога.
+                        </FieldHint>
                     </div>
 
                     <!-- Площадь -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Площадь (м²) *</label>
                         <input v-model="form.area" type="number" required min="0" step="0.1"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, 54.5"
+ />
+                        <FieldHint :show="form.area.length > 0">
+                            Площадь в квадратных метрах.
+                        </FieldHint>
                     </div>
 
                     <!-- Комнаты -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Комнат *</label>
                         <input v-model="form.rooms" type="number" required min="0"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, 2"
+ />
+                        <FieldHint :show="form.rooms.length > 0">
+                            Для студии укажите 0.
+                        </FieldHint>
                     </div>
 
                     <!-- Этаж -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Этаж *</label>
                         <input v-model="form.floor" type="number" required min="0"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, 5"
+ />
+                        <FieldHint :show="form.floor.length > 0">
+                            Этаж квартиры в здании.
+                        </FieldHint>
                     </div>
 
                     <!-- Всего этажей -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Всего этажей *</label>
                         <input v-model="form.total_floors" type="number" required min="1"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="Например, 12"
+ />
+                        <FieldHint :show="form.total_floors.length > 0">
+                            Общее число этажей в доме.
+                        </FieldHint>
                     </div>
 
                     <!-- Тип -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Тип *</label>
                         <select v-model="form.type" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                             <option value="">Выберите тип</option>
                             <option v-for="type in props.types" :key="type" :value="type">
                                 {{ type }}
                             </option>
                         </select>
+                        <FieldHint :show="form.type.length > 0">
+                            Например, квартира или дом.
+                        </FieldHint>
                     </div>
 
                     <!-- Статус -->
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Статус *</label>
                         <select v-model="form.status" required
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                            class="site-input mt-1"
+>
                             <option v-for="status in props.statuses" :key="status" :value="status">
                                 {{ status }}
                             </option>
                         </select>
+                        <FieldHint :show="form.status.length > 0">
+                            Продаётся или сдаётся в аренду.
+                        </FieldHint>
                     </div>
 
                     <!-- Удобства -->
                     <div class="col-span-2">
                         <label class="block text-sm font-medium text-brand-ink">Удобства</label>
-                        <input type="text" @input="checkFormating"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold">
+                        <input v-model="amenitiesInput" type="text" @input="checkFormating"
+                            class="site-input mt-1"
+                            placeholder="Парковка, лифт, балкон"
+>
+                        <FieldHint :show="amenitiesInput.length > 0">
+                            Перечислите удобства через запятую.
+                        </FieldHint>
                         <div v-if="errors.amenities" class="mt-1 text-sm text-red-600">
                             {{ errors.amenities }}
                         </div>
@@ -270,7 +335,12 @@ const submit = () => {
                     <div>
                         <label class="block text-sm font-medium text-brand-ink">Дата публикации</label>
                         <input v-model="form.published_at" type="date"
-                            class="mt-1 w-full rounded-xl border-brand-line shadow-sm focus:border-brand-gold focus:ring-brand-gold" />
+                            class="site-input mt-1"
+                            placeholder="ГГГГ-ММ-ДД"
+ />
+                        <FieldHint :show="form.published_at.length > 0">
+                            Дата появления объекта в каталоге.
+                        </FieldHint>
                     </div>
 
                     <!-- Главное изображение -->
@@ -279,6 +349,9 @@ const submit = () => {
                         <input type="file" accept="image/*"
                             class="mt-1 block w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-sand file:text-brand hover:file:bg-brand-cream"
                             @change="handleImageUpload" />
+                        <FieldHint :show="true">
+                            JPG или PNG — это изображение станет обложкой в каталоге.
+                        </FieldHint>
                         <div v-if="imagePreview" class="mt-2">
                             <img :src="imagePreview" class="w-32 h-32 object-cover rounded border" />
                         </div>
@@ -290,6 +363,9 @@ const submit = () => {
                         <input type="file" accept="image/*" multiple
                             class="mt-1 block w-full text-sm text-brand-muted file:mr-4 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-sm file:font-semibold file:bg-brand-sand file:text-brand hover:file:bg-brand-cream"
                             @change="handleImagesUpload" />
+                        <FieldHint :show="true">
+                            Можно выбрать несколько — они появятся в галерее.
+                        </FieldHint>
                         <div v-if="imagesPreview.length" class="mt-2 flex flex-wrap gap-2">
                             <div v-for="(preview, index) in imagesPreview" :key="index" class="relative group">
                                 <img :src="preview" class="w-20 h-20 object-cover rounded border" />
@@ -309,7 +385,8 @@ const submit = () => {
                 <!-- Кнопки -->
                 <div class="flex justify-end gap-4 pt-6 mt-6 border-t border-brand-line">
                     <Link :href="route('admin.properties.index')"
-                        class="px-4 py-2 bg-brand-soft text-white rounded-xl hover:bg-brand-muted">
+                        class="site-btn-outline"
+>
                         Отмена
                     </Link>
                     <button type="submit" :disabled="submitting"

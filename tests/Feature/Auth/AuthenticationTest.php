@@ -27,7 +27,36 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertAuthenticated();
+        $response->assertRedirect(route('dashboard', absolute: false));
+    }
+
+    public function test_staff_users_are_redirected_to_admin_dashboard(): void
+    {
+        $user = User::factory()->admin()->create();
+
+        $response = $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticated();
         $response->assertRedirect(route('admin.dashboard', absolute: false));
+    }
+
+    public function test_users_can_authenticate_with_phone(): void
+    {
+        $user = User::factory()->create([
+            'email' => null,
+            'phone' => '+79991234567',
+        ]);
+
+        $response = $this->post('/login', [
+            'identifier' => '+7 (999) 123-45-67',
+            'password' => 'password',
+        ]);
+
+        $this->assertAuthenticatedAs($user);
+        $response->assertRedirect(route('dashboard', absolute: false));
     }
 
     public function test_users_can_not_authenticate_with_invalid_password(): void
@@ -40,6 +69,18 @@ class AuthenticationTest extends TestCase
         ]);
 
         $this->assertGuest();
+    }
+
+    public function test_invalid_credentials_error_is_in_russian(): void
+    {
+        $user = User::factory()->create();
+
+        $this->post('/login', [
+            'email' => $user->email,
+            'password' => 'wrong-password',
+        ])->assertSessionHasErrors([
+            'identifier' => 'Не удалось войти. Проверьте email или телефон и пароль.',
+        ]);
     }
 
     public function test_users_can_logout(): void

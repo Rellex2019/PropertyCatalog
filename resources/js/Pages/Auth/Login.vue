@@ -1,5 +1,7 @@
 <script setup>
+import AuthNotice from '@/Components/AuthNotice.vue';
 import Checkbox from '@/Components/Checkbox.vue';
+import FieldHint from '@/Components/FieldHint.vue';
 import InputError from '@/Components/InputError.vue';
 import InputLabel from '@/Components/InputLabel.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
@@ -18,7 +20,7 @@ defineProps({
 });
 
 const form = useForm({
-    email: '',
+    identifier: '',
     password: '',
     remember: false,
 });
@@ -34,72 +36,74 @@ const submit = () => {
     <AuthInputLayout>
         <SeoHead
             title="Вход в аккаунт"
-            description="Войдите в личный кабинет ДомГид, чтобы сохранять объявления и управлять профилем."
+            description="Войдите в ДомГид по email или телефону, чтобы сохранять избранное."
             :noindex="true"
         />
 
-        <h1 class="mb-6 text-2xl font-semibold text-brand">Вход в аккаунт</h1>
+        <h1 class="text-2xl font-semibold text-brand">Вход в аккаунт</h1>
+        <p class="mt-3 max-w-xl text-sm text-brand-muted">
+            Введите email или телефон, который указали при регистрации.
+        </p>
 
-        <div v-if="status" class="mb-4 text-sm font-medium text-green-600">
-            {{ status }}
-        </div>
+        <AuthNotice v-if="status" :message="status" tone="info" class="mt-4" />
 
-        <form @submit.prevent="submit">
+        <form class="mt-6" @submit.prevent="submit">
             <div>
-                <InputLabel for="email" value="Email" />
-
+                <InputLabel for="identifier" value="Email или телефон" />
                 <TextInput
-                    id="email"
-                    type="email"
+                    id="identifier"
+                    v-model="form.identifier"
+                    type="text"
                     class="mt-1 block w-full"
-                    v-model="form.email"
                     required
                     autofocus
                     autocomplete="username"
+                    placeholder="name@example.com или +7 999 123-45-67"
                 />
-
+                <FieldHint :show="form.identifier.length > 0">
+                    Если регистрировались по телефону, введите его в любом удобном формате.
+                </FieldHint>
+                <InputError class="mt-2" :message="form.errors.identifier" />
                 <InputError class="mt-2" :message="form.errors.email" />
             </div>
 
             <div class="mt-4">
-                <InputLabel for="password" value="Password" />
-
+                <InputLabel for="password" value="Пароль" />
                 <TextInput
                     id="password"
+                    v-model="form.password"
                     type="password"
                     class="mt-1 block w-full"
-                    v-model="form.password"
                     required
                     autocomplete="current-password"
                 />
-
+                <FieldHint :show="form.password.length > 0">
+                    Пароль чувствителен к регистру и пробелам.
+                </FieldHint>
                 <InputError class="mt-2" :message="form.errors.password" />
             </div>
 
             <div class="mt-4 block">
                 <label class="flex items-center">
                     <Checkbox name="remember" v-model:checked="form.remember" />
-                    <span class="ms-2 text-sm text-brand-muted"
-                        >Remember me</span
-                    >
+                    <span class="ms-2 text-sm text-brand-muted">Запомнить меня</span>
                 </label>
             </div>
 
-            <div class="mt-4 flex items-center justify-end">
+            <div class="mt-6 flex flex-wrap items-center justify-end gap-4">
                 <Link
                     v-if="canResetPassword"
                     :href="route('password.request')"
                     class="rounded-md text-sm text-brand-muted underline hover:text-brand focus:outline-none focus:ring-2 focus:ring-brand-gold focus:ring-offset-2"
                 >
-                    Forgot your password?
+                    Забыли пароль?
                 </Link>
 
                 <PrimaryButton
-                    class="ms-4"
                     :class="{ 'opacity-25': form.processing }"
                     :disabled="form.processing"
                 >
-                    Log in
+                    Войти
                 </PrimaryButton>
             </div>
         </form>
