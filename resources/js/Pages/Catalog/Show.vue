@@ -603,16 +603,16 @@ const formattedPrice = computed(() => {
 }
 
 .overflow-x-auto::-webkit-scrollbar-track {
-    background: #f1f1f1;
+    background: rgb(var(--brand-sand));
     border-radius: 2px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-thumb {
-    background: #c1c1c1;
+    background: rgb(var(--brand-line));
     border-radius: 2px;
 }
 
 .overflow-x-auto::-webkit-scrollbar-thumb:hover {
-    background: #a8a8a8;
+    background: rgb(var(--brand-soft));
 }
 </style>

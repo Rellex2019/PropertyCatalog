@@ -1,9 +1,7 @@
 <script setup>
-import { ref, computed } from 'vue';
-import { Link, router } from '@inertiajs/vue3';
+import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 import PropertyCard from '@/Components/PropertyCard.vue';
 import PropertyFilters from '@/Components/PropertyFilters.vue';
-import PropertyStats from '@/Components/PropertyStats.vue';
 import SeoHead from '@/Components/SeoHead.vue';
 import DynamicAuthLayout from '@/Layouts/DynamicAuthLayout.vue';
 
@@ -13,11 +11,14 @@ defineOptions({
 
 const props = defineProps({
     properties: Array,
-    statistics: Object
+    total: {
+        type: Number,
+        default: 0,
+    },
 });
 
 const catalogDescription = computed(() =>
-    `Каталог недвижимости ДомГид: ${props.properties.length} актуальных объектов. Фильтруйте по типу, городу, цене и количеству комнат.`,
+    `Каталог недвижимости ДомГид: ${props.total} актуальных объектов. Фильтруйте по типу, городу, цене и количеству комнат.`,
 );
 
 const catalogSchema = computed(() => ({
@@ -27,7 +28,7 @@ const catalogSchema = computed(() => ({
     url: route('catalog.index'),
     mainEntity: {
         '@type': 'ItemList',
-        numberOfItems: props.properties.length,
+        numberOfItems: props.total,
         itemListElement: props.properties.slice(0, 12).map((property, index) => ({
             '@type': 'ListItem',
             position: index + 1,
@@ -37,7 +38,6 @@ const catalogSchema = computed(() => ({
     },
 }));
 
-// Состояние для фильтров
 const filters = ref({
     search: '',
     type: 'all',
@@ -52,12 +52,36 @@ const sortBy = ref('newest');
 const propertyTypes = ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая'];
 const propertyStatuses = ['Продается', 'Сдается'];
 
+const backendProperties = ref([]);
+const backendUsed = ref(false);
+const isTyping = ref(false);
+const isSearching = ref(false);
+
+let debounceTimer = null;
+let searchController = null;
+let requestId = 0;
+
+const sortProperties = (items) => {
+    const result = [...items];
+
+    switch (sortBy.value) {
+        case 'price-asc':
+            return result.sort((a, b) => a.price - b.price);
+        case 'price-desc':
+            return result.sort((a, b) => b.price - a.price);
+        default:
+            return result.sort((a, b) =>
+                new Date(b.created_at) - new Date(a.created_at)
+            );
+    }
+};
+
 const filteredProperties = computed(() => {
     let result = props.properties;
 
     if (filters.value.search) {
         const search = filters.value.search.toLowerCase();
-        result = result.filter(p => 
+        result = result.filter(p =>
             p.title.toLowerCase().includes(search) ||
             p.address.toLowerCase().includes(search)
         );
@@ -79,27 +103,85 @@ const filteredProperties = computed(() => {
     }
 
     if (filters.value.rooms !== 'all') {
-        result = result.filter(p => p.rooms === Number(filters.value.rooms));
+        result = result.filter(p => Number(filters.value.rooms) === 4
+            ? p.rooms >= 4
+            : p.rooms === Number(filters.value.rooms));
     }
 
-    switch (sortBy.value) {
-        case 'price-asc':
-            result = [...result].sort((a, b) => a.price - b.price);
-            break;
-        case 'price-desc':
-            result = [...result].sort((a, b) => b.price - a.price);
-            break;
-        case 'newest':
-            result = [...result].sort((a, b) => 
-                new Date(b.created_at) - new Date(a.created_at)
-            );
-            break;
-        default:
-            break;
-    }
-
-    return result;
+    return sortProperties(result);
 });
+
+const visibleProperties = computed(() =>
+    backendUsed.value ? sortProperties(backendProperties.value) : filteredProperties.value,
+);
+
+const runBackendSearch = async () => {
+    const currentRequest = ++requestId;
+
+    if (searchController) {
+        searchController.abort();
+    }
+
+    searchController = new AbortController();
+    isTyping.value = false;
+    isSearching.value = true;
+
+    const params = new URLSearchParams();
+
+    Object.entries(filters.value).forEach(([key, value]) => {
+        if (value !== '' && value !== 'all') {
+            params.set(key, String(value));
+        }
+    });
+
+    try {
+        const response = await fetch(`${route('catalog.search')}?${params.toString()}`, {
+            signal: searchController.signal,
+            headers: {
+                Accept: 'application/json',
+                'X-Requested-With': 'XMLHttpRequest',
+            },
+        });
+
+        if (!response.ok) {
+            throw new Error('Catalog search failed');
+        }
+
+        const data = await response.json();
+
+        if (currentRequest === requestId) {
+            backendProperties.value = data.properties || [];
+            backendUsed.value = true;
+        }
+    } catch (error) {
+        if (currentRequest === requestId && error.name !== 'AbortError') {
+            backendUsed.value = false;
+        }
+    } finally {
+        if (currentRequest === requestId) {
+            isSearching.value = false;
+        }
+    }
+};
+
+const scheduleBackendSearch = () => {
+    requestId += 1;
+    clearTimeout(debounceTimer);
+
+    if (searchController) {
+        searchController.abort();
+    }
+
+    backendUsed.value = false;
+    isTyping.value = filteredProperties.value.length === 0;
+    isSearching.value = false;
+
+    if (filteredProperties.value.length >= 10) {
+        return;
+    }
+
+    debounceTimer = setTimeout(runBackendSearch, 1500);
+};
 
 const resetFilters = () => {
     filters.value = {
@@ -113,12 +195,18 @@ const resetFilters = () => {
     sortBy.value = 'newest';
 };
 
-const updateFilters = () => {
-    router.get('/catalog', filters.value, {
-        preserveState: true,
-        preserveScroll: true
-    });
-};
+watch(filters, scheduleBackendSearch, { deep: true });
+
+onMounted(scheduleBackendSearch);
+
+onBeforeUnmount(() => {
+    requestId += 1;
+    clearTimeout(debounceTimer);
+
+    if (searchController) {
+        searchController.abort();
+    }
+});
 </script>
 
 <template>
@@ -136,59 +224,78 @@ const updateFilters = () => {
                 <h1 class="site-title mt-3">
                     Каталог недвижимости
                 </h1>
-                <p class="mt-3 text-sm text-brand-muted sm:text-base">
-                    {{ statistics.total }} объектов в базе
-                </p>
             </div>
 
-            <PropertyStats :statistics="statistics" />
-
-            <PropertyFilters 
-                v-model:filters="filters"
-                :property-types="propertyTypes"
-                :property-statuses="propertyStatuses"
-                @reset="resetFilters"
-                @update="updateFilters"
-            />
-
-            <div class="mb-4 sm:mb-6 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3 sm:gap-0">
-                <p class="text-sm text-brand-muted sm:text-base">
-                    Найдено: <span class="font-semibold text-brand">{{ filteredProperties.length }}</span> объектов
-                </p>
-                <div class="flex items-center gap-2 w-full sm:w-auto">
-                    <label class="whitespace-nowrap text-sm text-brand-muted">Сортировать:</label>
-                    <select
-                        v-model="sortBy"
-                        class="site-input w-full sm:w-auto"
-                    >
-                        <option value="newest">Сначала новые</option>
-                        <option value="price-asc">Сначала дешевые</option>
-                        <option value="price-desc">Сначала дорогие</option>
-                    </select>
-                </div>
-            </div>
-
-            <div v-if="filteredProperties.length" class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 sm:gap-8">
-                <PropertyCard 
-                    v-for="property in filteredProperties" 
-                    :key="property.id"
-                    :property="property"
+            <div class="grid gap-8 lg:grid-cols-[17rem_minmax(0,1fr)] lg:gap-10">
+                <PropertyFilters
+                    v-model:filters="filters"
+                    :property-types="propertyTypes"
+                    :property-statuses="propertyStatuses"
+                    @reset="resetFilters"
                 />
-            </div>
 
-            <div v-else class="site-card px-6 py-12 text-center">
-                <svg class="mx-auto h-10 w-10 text-brand-soft sm:h-12 sm:w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                </svg>
-                <h3 class="mt-2 text-xl font-semibold text-brand">Ничего не найдено</h3>
-                <p class="mt-2 text-sm text-brand-muted">Попробуйте изменить параметры поиска</p>
-                <button
-                    type="button"
-                    class="site-btn-primary mt-6"
-                    @click="resetFilters"
-                >
-                    Сбросить фильтры
-                </button>
+                <div class="min-w-0">
+                    <div class="mb-4 flex flex-col gap-3 sm:mb-6 sm:flex-row sm:items-center sm:justify-between">
+                        <div class="flex flex-wrap items-center gap-2">
+                            <p class="text-sm text-brand-muted sm:text-base">
+                                Найдено: <span class="font-semibold text-brand">{{ visibleProperties.length }}</span> объектов
+                            </p>
+                            <span v-if="isSearching && visibleProperties.length" class="inline-flex items-center gap-1.5 text-xs text-brand-soft">
+                                <svg class="h-3.5 w-3.5 animate-spin" fill="none" viewBox="0 0 24 24">
+                                    <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4" />
+                                    <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                                </svg>
+                                Уточняем в базе…
+                            </span>
+                        </div>
+                        <div class="flex w-full items-center gap-2 sm:w-auto">
+                            <label class="whitespace-nowrap text-sm text-brand-muted">Сортировать:</label>
+                            <select
+                                v-model="sortBy"
+                                class="site-input w-full sm:w-auto"
+                            >
+                                <option value="newest">Сначала новые</option>
+                                <option value="price-asc">Сначала дешевые</option>
+                                <option value="price-desc">Сначала дорогие</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div v-if="!visibleProperties.length && (isTyping || isSearching)" class="site-card px-6 py-12 text-center">
+                        <svg class="mx-auto h-10 w-10 animate-spin text-brand-gold sm:h-12 sm:w-12" fill="none" viewBox="0 0 24 24">
+                            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="3" />
+                            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" />
+                        </svg>
+                        <h3 class="mt-4 text-xl font-semibold text-brand">Ищем ещё объекты…</h3>
+                        <p class="mt-2 text-sm text-brand-muted">
+                            Показаны не все объекты — подождите, пока закончится поиск в базе.
+                        </p>
+                    </div>
+
+                    <div v-else-if="visibleProperties.length" class="grid grid-cols-1 gap-6">
+                        <PropertyCard
+                            v-for="property in visibleProperties"
+                            :key="property.id"
+                            :property="property"
+                            wide
+                        />
+                    </div>
+
+                    <div v-else class="site-card px-6 py-12 text-center">
+                        <svg class="mx-auto h-10 w-10 text-brand-soft sm:h-12 sm:w-12" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                        <h3 class="mt-2 text-xl font-semibold text-brand">Ничего не найдено</h3>
+                        <p class="mt-2 text-sm text-brand-muted">Попробуйте изменить параметры поиска</p>
+                        <button
+                            type="button"
+                            class="site-btn-primary mt-6"
+                            @click="resetFilters"
+                        >
+                            Сбросить фильтры
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -3,9 +3,26 @@
 @tailwind utilities;
 
 @layer base {
+    :root {
+        --brand-default: 11 59 54;
+        --brand-ink: 28 43 41;
+        --brand-forest: 21 89 79;
+        --brand-teal: 47 143 124;
+        --brand-gold: 201 138 60;
+        --brand-gold-light: 226 179 107;
+        --brand-gold-dark: 179 123 47;
+        --brand-cream: 247 244 239;
+        --brand-sand: 241 237 230;
+        --brand-line: 229 222 210;
+        --brand-muted: 107 123 119;
+        --brand-soft: 124 139 135;
+        --site-filter-header: var(--brand-sand);
+        --site-filter-header-border: var(--brand-line);
+    }
+
     html {
         overflow-y: scroll;
-        scrollbar-color: #C98A3C #F1EDE6;
+        scrollbar-color: rgb(var(--brand-gold)) rgb(var(--brand-sand));
         scrollbar-width: thin;
     }
 
@@ -14,11 +31,11 @@
     }
 
     html::-webkit-scrollbar-track {
-        background: #F1EDE6;
+        background: rgb(var(--brand-sand));
     }
 
     html::-webkit-scrollbar-thumb {
-        background: #C98A3C;
+        background: rgb(var(--brand-gold));
         border-radius: 999px;
     }
 }
@@ -34,6 +51,11 @@
 
     .site-card {
         @apply rounded-3xl bg-white shadow-sm ring-1 ring-black/5;
+    }
+
+    .site-filter-header {
+        border-bottom: 1px solid rgb(var(--site-filter-header-border));
+        background-color: rgb(var(--site-filter-header));
     }
 
     .site-card-hover {

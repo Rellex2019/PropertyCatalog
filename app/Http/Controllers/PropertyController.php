@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use App\Models\Property;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 use Inertia\Inertia;
 use Inertia\Response;
 
@@ -89,17 +91,61 @@ class PropertyController extends Controller
     {
         $properties = Property::active()
             ->latest('published_at')
+            ->take(50)
             ->get();
-
-        $statistics = [
-            'total' => Property::active()->count(),
-            'sold' => Property::where('status', 'Продано')->count(),
-            'featured' => Property::featured()->count(),
-        ];
 
         return Inertia::render('Catalog/Index', [
             'properties' => $properties,
-            'statistics' => $statistics,
+            'total' => Property::active()->count(),
+        ]);
+    }
+
+    public function search(Request $request): JsonResponse
+    {
+        $query = Property::active();
+
+        if ($request->filled('search')) {
+            $search = $request->string('search')->toString();
+            $query->where(function ($query) use ($search) {
+                $query->where('title', 'like', "%{$search}%")
+                    ->orWhere('address', 'like', "%{$search}%");
+            });
+        }
+
+        if ($request->input('type') && $request->input('type') !== 'all') {
+            $query->where('type', $request->input('type'));
+        }
+
+        if ($request->input('status') && $request->input('status') !== 'all') {
+            $query->where('status', $request->input('status'));
+        }
+
+        if ($request->filled('priceMin') && is_numeric($request->input('priceMin'))) {
+            $query->where('price', '>=', $request->input('priceMin'));
+        }
+
+        if ($request->filled('priceMax') && is_numeric($request->input('priceMax'))) {
+            $query->where('price', '<=', $request->input('priceMax'));
+        }
+
+        if ($request->input('rooms') && $request->input('rooms') !== 'all') {
+            $rooms = (int) $request->input('rooms');
+
+            if ($rooms >= 4) {
+                $query->where('rooms', '>=', 4);
+            } else {
+                $query->where('rooms', $rooms);
+            }
+        }
+
+        $query->latest('published_at');
+
+        $total = (clone $query)->count();
+        $properties = $query->take(50)->get();
+
+        return response()->json([
+            'properties' => $properties,
+            'total' => $total,
         ]);
     }
 

@@ -20,6 +20,7 @@ Route::middleware('auth')->group(function () {
 });
 
 Route::get('/catalog', [PropertyController::class, 'index'])->name('catalog.index');
+Route::get('/catalog/search', [PropertyController::class, 'search'])->name('catalog.search');
 Route::get('/catalog/{property}', [PropertyController::class, 'show'])->name('catalog.show');
 
 Route::post('/qr/generate', [QRController::class, 'generate'])->name('qr.generate');
