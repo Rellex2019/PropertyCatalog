@@ -42,35 +42,21 @@ const formatPrice = (property) => {
 const stats = computed(() => [
     { value: formatNumber(props.statistics?.total), label: 'объектов в каталоге' },
     { value: formatNumber(props.statistics?.for_sale), label: 'вариантов на продажу' },
-    { value: formatNumber(props.statistics?.for_rent), label: 'объектов в аренду' },
     { value: formatNumber(props.statistics?.cities), label: 'городов для поиска' },
 ]);
-
-const dealTypes = [
-    { value: 'Продается', label: 'Купить' },
-    { value: 'Сдается', label: 'Снять' },
-];
 
 const propertyTypes = ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'];
 
 const searchForm = ref({
-    deal: 'Продается',
     type: '',
     city: '',
     rooms: '',
     maxPrice: '',
 });
 
-const selectDeal = (value) => {
-    searchForm.value.deal = value;
-};
-
 const submitSearch = () => {
     const params = {};
 
-    if (searchForm.value.deal) {
-        params.status = searchForm.value.deal;
-    }
     if (searchForm.value.type) {
         params.type = searchForm.value.type;
     }
@@ -217,18 +203,6 @@ const homeSchema = computed(() => ({
                                 <h2 class="text-xl font-semibold sm:text-2xl">Подберите объект мечты</h2>
                                 <p class="mt-1 text-sm text-brand-muted">Несколько фильтров — и подборка готова</p>
                             </div>
-                            <div class="inline-flex rounded-xl bg-brand-sand p-1">
-                                <button
-                                    v-for="deal in dealTypes"
-                                    :key="deal.value"
-                                    type="button"
-                                    class="rounded-lg px-5 py-2 text-sm font-semibold transition"
-                                    :class="searchForm.deal === deal.value ? 'bg-brand text-white' : 'text-brand-muted hover:text-brand-ink'"
-                                    @click="selectDeal(deal.value)"
-                                >
-                                    {{ deal.label }}
-                                </button>
-                            </div>
                         </div>
 
                         <form @submit.prevent="submitSearch" class="mt-6 grid gap-4 md:grid-cols-5">
@@ -277,8 +251,8 @@ const homeSchema = computed(() => ({
             </section>
 
             <section class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="grid gap-6 rounded-b-3xl bg-white p-7 shadow-lg sm:grid-cols-2 lg:grid-cols-4">
-                    <div v-for="item in stats" :key="item.label" class="border-brand-line sm:border-r sm:pr-6 lg:last:border-r-0">
+                <div class="grid gap-6 rounded-b-3xl bg-white p-7 shadow-lg sm:grid-cols-3">
+                    <div v-for="item in stats" :key="item.label" class="border-brand-line sm:border-r sm:pr-6 sm:last:border-r-0">
                         <p class="text-3xl font-semibold text-brand">{{ item.value }}</p>
                         <p class="mt-1 text-sm text-brand-muted">{{ item.label }}</p>
                     </div>

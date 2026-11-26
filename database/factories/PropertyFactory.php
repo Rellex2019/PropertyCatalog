@@ -13,7 +13,7 @@ class PropertyFactory extends Factory
     public function definition(): array
     {
         $types = ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'];
-        $statuses = ['Продается', 'Сдается', 'Продано'];
+        $statuses = ['Продается', 'Продано'];
         $cities = ['Москва', 'Санкт-Петербург', 'Казань', 'Новосибирск', 'Екатеринбург', 'Сочи'];
 
         $price = $this->faker->numberBetween(5000000, 100000000);

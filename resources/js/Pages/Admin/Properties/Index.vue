@@ -24,7 +24,6 @@ const formatPrice = (price) => {
 const getStatusBadge = (status) => {
     const statusMap = {
         'Продается': 'bg-brand-teal/20 text-brand-forest',
-        'Сдается': 'bg-brand-sand text-brand',
         'Продано': 'bg-red-100 text-red-700'
     };
     return statusMap[status] || 'bg-brand-sand text-brand-ink';

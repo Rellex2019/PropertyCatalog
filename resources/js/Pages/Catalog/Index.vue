@@ -42,18 +42,15 @@ const catalogSchema = computed(() => ({
 const page = usePage();
 
 const propertyTypes = ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'];
-const propertyStatuses = ['Продается', 'Сдается'];
 
 const initialFilters = () => {
     const params = new URLSearchParams(page.url.split('?')[1] || '');
     const type = params.get('type');
-    const status = params.get('status');
     const rooms = params.get('rooms');
 
     return {
         search: params.get('search') || '',
         type: propertyTypes.includes(type) ? type : 'all',
-        status: propertyStatuses.includes(status) ? status : 'all',
         priceMin: params.get('priceMin') || '',
         priceMax: params.get('priceMax') || '',
         rooms: ['1', '2', '3', '4', '5'].includes(rooms) ? rooms : 'all',
@@ -102,10 +99,6 @@ const filteredProperties = computed(() => {
 
     if (filters.value.type !== 'all') {
         result = result.filter(p => p.type === filters.value.type);
-    }
-
-    if (filters.value.status !== 'all') {
-        result = result.filter(p => p.status === filters.value.status);
     }
 
     if (filters.value.priceMin) {
@@ -200,7 +193,6 @@ const resetFilters = () => {
     filters.value = {
         search: '',
         type: 'all',
-        status: 'all',
         priceMin: '',
         priceMax: '',
         rooms: 'all'
@@ -243,7 +235,6 @@ onBeforeUnmount(() => {
                 <PropertyFilters
                     v-model:filters="filters"
                     :property-types="propertyTypes"
-                    :property-statuses="propertyStatuses"
                     @reset="resetFilters"
                 />
 

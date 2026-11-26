@@ -248,7 +248,6 @@ const amenities = computed(() => {
 const statusClass = computed(() => {
     const statusMap = {
         'Продается': 'bg-brand-teal',
-        'Сдается': 'bg-brand-gold text-brand',
         'Продано': 'bg-red-500',
     };
     return statusMap[props.property.status] || 'bg-brand-soft';

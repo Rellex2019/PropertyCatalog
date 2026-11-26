@@ -4,7 +4,6 @@ import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
 const props = defineProps({
     filters: Object,
     propertyTypes: Array,
-    propertyStatuses: Array,
 });
 
 const emit = defineEmits(['reset']);
@@ -28,11 +27,6 @@ const typeOptions = computed(() => [
     ...props.propertyTypes.map((type) => ({ value: type, label: type })),
 ]);
 
-const statusOptions = computed(() => [
-    { value: 'all', label: 'Все' },
-    ...props.propertyStatuses.map((status) => ({ value: status, label: status })),
-]);
-
 const roomOptions = [
     { value: 'all', label: 'Все' },
     { value: '1', label: '1' },
@@ -51,9 +45,6 @@ const activeFilters = computed(() => {
     }
     if (props.filters.type !== 'all') {
         items.push(props.filters.type);
-    }
-    if (props.filters.status !== 'all') {
-        items.push(props.filters.status);
     }
     if (props.filters.priceMin) {
         items.push(`от ${props.filters.priceMin} ₽`);
@@ -196,24 +187,6 @@ onBeforeUnmount(() => {
                                     ? 'border-brand bg-brand text-white shadow-sm'
                                     : 'border-brand-line bg-white text-brand-muted hover:border-brand-gold hover:text-brand'"
                                 @click="filters.type = option.value"
-                            >
-                                {{ option.label }}
-                            </button>
-                        </div>
-                    </div>
-
-                    <div>
-                        <p class="mb-2 text-xs font-semibold uppercase tracking-[0.12em] text-brand-soft">Статус</p>
-                        <div class="flex flex-wrap gap-2">
-                            <button
-                                v-for="option in statusOptions"
-                                :key="option.value"
-                                type="button"
-                                class="rounded-full border px-3 py-2 text-xs font-semibold transition"
-                                :class="filters.status === option.value
-                                    ? 'border-brand-forest bg-brand-forest text-white shadow-sm'
-                                    : 'border-brand-line bg-white text-brand-muted hover:border-brand-gold hover:text-brand'"
-                                @click="filters.status = option.value"
                             >
                                 {{ option.label }}
                             </button>

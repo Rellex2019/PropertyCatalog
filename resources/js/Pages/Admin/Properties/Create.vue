@@ -298,7 +298,7 @@ const submit = () => {
                             </option>
                         </select>
                         <FieldHint :show="form.status.length > 0">
-                            Продаётся или сдаётся в аренду.
+                            Статус продажи объекта.
                         </FieldHint>
                     </div>
 

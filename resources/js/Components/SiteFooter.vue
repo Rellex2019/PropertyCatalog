@@ -34,7 +34,7 @@ const homeHref = (hash) => (isHome.value ? hash : `${route('home')}${hash}`);
                         <div class="mt-4 space-y-3 text-sm text-brand-muted">
                             <Link :href="`${route('catalog.index')}?type=Квартира`" class="block transition hover:text-brand">Квартиры</Link>
                             <Link :href="`${route('catalog.index')}?type=Дом`" class="block transition hover:text-brand">Дома</Link>
-                            <Link :href="`${route('catalog.index')}?status=Сдается`" class="block transition hover:text-brand">Аренда</Link>
+                            <Link :href="`${route('catalog.index')}?type=Земельный участок`" class="block transition hover:text-brand">Земельные участки</Link>
                         </div>
                     </div>
                     <div>

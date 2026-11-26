@@ -80,7 +80,6 @@ class PropertyController extends Controller
             'statistics' => [
                 'total' => Property::active()->count(),
                 'for_sale' => Property::active()->where('status', 'Продается')->count(),
-                'for_rent' => Property::active()->where('status', 'Сдается')->count(),
                 'featured' => Property::active()->featured()->count(),
                 'cities' => Property::active()->whereNotNull('city')->distinct()->count('city'),
             ],

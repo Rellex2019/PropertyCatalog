@@ -6,11 +6,14 @@ use App\Http\Controllers\Controller;
 use App\Models\Property;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Validation\Rule;
 use Inertia\Inertia;
 use Inertia\Response;
 
 class PropertyController extends Controller
 {
+    private const STATUSES = ['Продается', 'Продано'];
+
     /**
      * Список объектов недвижимости
      */
@@ -52,7 +55,7 @@ class PropertyController extends Controller
             'active' => Property::where('is_active', true)->count(),
             'featured' => Property::where('is_featured', true)->count(),
             'types' => Property::select('type')->distinct()->pluck('type'),
-            'statuses' => ['Продается', 'Сдается', 'Продано'],
+            'statuses' => self::STATUSES,
         ];
 
         return Inertia::render('Admin/Properties/Index', [
@@ -73,7 +76,7 @@ class PropertyController extends Controller
     {
         return Inertia::render('Admin/Properties/Create', [
             'types' => ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'],
-            'statuses' => ['Продается', 'Сдается', 'Продано'],
+            'statuses' => self::STATUSES,
             'amenitiesList' => [
                 'Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Детская площадка',
                 'Спортзал', 'Бассейн', 'Сауна', 'Wi-Fi', 'Кондиционер',
@@ -100,7 +103,7 @@ class PropertyController extends Controller
             'floor' => 'required|integer|min:0',
             'total_floors' => 'required|integer|min:0',
             'type' => 'required|string',
-            'status' => 'required|string',
+            'status' => ['required', Rule::in(self::STATUSES)],
             'image' => 'nullable|image|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|max:2048',
@@ -151,7 +154,7 @@ class PropertyController extends Controller
         return Inertia::render('Admin/Properties/Edit', [
             'property' => $property,
             'types' => ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'],
-            'statuses' => ['Продается', 'Сдается', 'Продано'],
+            'statuses' => self::STATUSES,
             'amenitiesList' => [
                 'Парковка', 'Лифт', 'Консьерж', 'Охрана', 'Детская площадка',
                 'Спортзал', 'Бассейн', 'Сауна', 'Wi-Fi', 'Кондиционер',
@@ -178,7 +181,7 @@ class PropertyController extends Controller
             'floor' => 'required|integer|min:0',
             'total_floors' => 'required|integer|min:0',
             'type' => 'required|string',
-            'status' => 'required|string',
+            'status' => ['required', Rule::in(self::STATUSES)],
             'image' => 'nullable|image|max:2048',
             'images' => 'nullable|array',
             'images.*' => 'image|max:2048',

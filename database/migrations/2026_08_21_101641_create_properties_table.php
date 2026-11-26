@@ -24,7 +24,7 @@ return new class extends Migration
             $table->integer('floor');
             $table->integer('total_floors');
             $table->string('type'); // Квартира, Дом, Таунхаус и т.д.
-            $table->string('status')->default('Продается'); // Продается, Сдается, Продано
+            $table->string('status')->default('Продается'); // Продается, Продано
             $table->string('image')->nullable();
             $table->json('images')->nullable(); // Дополнительные фото
             $table->json('amenities')->nullable(); // Удобства
