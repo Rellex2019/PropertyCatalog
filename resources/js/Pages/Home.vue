@@ -316,8 +316,8 @@ const homeSchema = computed(() => ({
                                 decoding="async"
                                 @error="handleImageError"
                             />
-                            <span class="absolute left-4 top-4 rounded-full bg-white/95 px-3 py-1 text-xs font-semibold text-brand">
-                                {{ property.type }}
+                            <span class="site-badge site-badge--neutral absolute left-4 top-4">
+                                {{ property.status }}
                             </span>
                             <span class="absolute right-4 top-4 rounded-full bg-brand/90 px-3 py-1 text-xs font-semibold text-white">
                                 {{ property.status }}

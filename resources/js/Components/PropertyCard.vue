@@ -32,7 +32,7 @@ const formatPrice = (price) => new Intl.NumberFormat('ru-RU').format(price);
                 <span class="site-badge absolute left-4 top-4 bg-brand text-white">
                     {{ property.type }}
                 </span>
-                <span class="site-badge absolute right-4 top-4 bg-white/95 text-brand">
+                <span class="site-badge site-badge--neutral absolute right-4 top-4">
                     {{ property.status }}
                 </span>
                 <span

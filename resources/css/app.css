@@ -4,45 +4,45 @@
 
 @layer base {
     :root {
-        --brand-default: 11 59 54;
-        --brand-ink: 28 43 41;
-        --brand-forest: 21 89 79;
-        --brand-teal: 47 143 124;
-        --brand-gold: 201 138 60;
-        --brand-gold-light: 226 179 107;
-        --brand-gold-dark: 179 123 47;
-        --brand-cream: 247 244 239;
-        --brand-sand: 241 237 230;
-        --brand-line: 229 222 210;
-        --brand-muted: 107 123 119;
-        --brand-soft: 124 139 135;
+        --brand-default: 11 59 58;
+        --brand-ink: 27 43 44;
+        --brand-forest: 20 88 86;
+        --brand-teal: 45 143 132;
+        --brand-gold: 199 138 66;
+        --brand-gold-light: 226 181 116;
+        --brand-gold-dark: 175 121 51;
+        --brand-cream: 246 246 244;
+        --brand-sand: 240 240 236;
+        --brand-line: 226 224 218;
+        --brand-muted: 102 120 120;
+        --brand-soft: 119 136 136;
         --brand-surface: var(--brand-default);
         --brand-surface-hover: var(--brand-forest);
 
-        --content: 28 43 41;
-        --content-muted: 107 123 119;
-        --content-soft: 124 139 135;
-        --surface-page: 247 244 239;
+        --content: 27 43 44;
+        --content-muted: 102 120 120;
+        --content-soft: 119 136 136;
+        --surface-page: 246 246 244;
         --surface-card: 255 255 255;
-        --surface-elevated: 255 255 255;
-        --surface-footer: 241 237 230;
-        --surface-subtle: 241 237 230;
+        --surface-elevated: 251 253 253;
+        --surface-footer: 240 240 236;
+        --surface-subtle: 240 240 236;
         --surface-overlay: 255 255 255;
-        --line: 229 222 210;
-        --accent: 201 138 60;
-        --accent-light: 226 179 107;
-        --accent-dark: 179 123 47;
-        --on-accent: 11 59 54;
+        --line: 226 224 218;
+        --accent: 199 138 66;
+        --accent-light: 226 181 116;
+        --accent-dark: 175 121 51;
+        --on-accent: 11 59 58;
         --on-brand: 255 255 255;
-        --glow-gold: 201 138 60;
-        --glow-gold-alpha: 0.1;
-        --glow-gold-strong-alpha: 0.2;
-        --glow-teal: 47 143 124;
-        --glow-teal-alpha: 0.2;
-        --theme-color: 247 244 239;
-        --scrollbar-track: 241 237 230;
-        --scrollbar-thumb: 201 138 60;
-        --scrollbar-thumb-hover: 179 123 47;
+        --glow-gold: 226 181 116;
+        --glow-gold-alpha: 0.18;
+        --glow-gold-strong-alpha: 0.26;
+        --glow-teal: 45 143 132;
+        --glow-teal-alpha: 0.16;
+        --theme-color: 246 246 244;
+        --scrollbar-track: 240 240 236;
+        --scrollbar-thumb: 199 138 66;
+        --scrollbar-thumb-hover: 175 121 51;
         --danger-bg: 254 242 242;
         --danger-line: 254 202 202;
         --danger-text: 185 28 28;
@@ -51,9 +51,9 @@
         --success-line: 167 243 208;
         --success-text: 6 95 70;
         --success-solid: 15 118 110;
-        --nav-bg: 238 242 255;
-        --nav-line: 165 180 252;
-        --nav-text: 55 48 163;
+        --nav-bg: 240 240 236;
+        --nav-line: 199 138 66;
+        --nav-text: 11 59 58;
     }
 
     .dark {
