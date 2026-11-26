@@ -108,7 +108,8 @@ class PropertyController extends Controller
             $search = $request->string('search')->toString();
             $query->where(function ($query) use ($search) {
                 $query->where('title', 'like', "%{$search}%")
-                    ->orWhere('address', 'like', "%{$search}%");
+                    ->orWhere('address', 'like', "%{$search}%")
+                    ->orWhere('city', 'like', "%{$search}%");
             });
         }
 

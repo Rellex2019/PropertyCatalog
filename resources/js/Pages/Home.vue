@@ -139,7 +139,7 @@ const homeSchema = computed(() => ({
         :schema="homeSchema"
     />
 
-    <div class="min-h-screen bg-brand-cream text-brand-ink">
+    <div id="top" class="min-h-screen bg-brand-cream text-brand-ink">
         <SiteHeader />
 
         <main>
@@ -277,7 +277,7 @@ const homeSchema = computed(() => ({
             </section>
 
             <section class="relative z-10 mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
-                <div class="grid gap-6 rounded-3xl bg-white p-7 shadow-lg sm:grid-cols-2 lg:grid-cols-4">
+                <div class="grid gap-6 rounded-b-3xl bg-white p-7 shadow-lg sm:grid-cols-2 lg:grid-cols-4">
                     <div v-for="item in stats" :key="item.label" class="border-brand-line sm:border-r sm:pr-6 lg:last:border-r-0">
                         <p class="text-3xl font-semibold text-brand">{{ item.value }}</p>
                         <p class="mt-1 text-sm text-brand-muted">{{ item.label }}</p>

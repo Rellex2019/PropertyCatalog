@@ -1,8 +1,12 @@
 <script setup>
-import { Link } from '@inertiajs/vue3';
+import { computed } from 'vue';
+import { Link, usePage } from '@inertiajs/vue3';
 import SiteBrand from '@/Components/SiteBrand.vue';
 
+const page = usePage();
 const currentYear = new Date().getFullYear();
+const isHome = computed(() => page.url.split('?')[0].split('#')[0] === '/');
+const homeHref = (hash) => (isHome.value ? hash : `${route('home')}${hash}`);
 </script>
 
 <template>
@@ -19,9 +23,10 @@ const currentYear = new Date().getFullYear();
                     <div>
                         <p class="text-sm font-semibold text-brand">Навигация</p>
                         <div class="mt-4 space-y-3 text-sm text-brand-muted">
-                            <Link :href="route('home')" class="block transition hover:text-brand">Главная</Link>
+                            <component :is="isHome ? 'a' : Link" :href="isHome ? '#top' : route('home')" class="block transition hover:text-brand">Главная</component>
                             <Link :href="route('catalog.index')" class="block transition hover:text-brand">Каталог</Link>
-                            <Link :href="`${route('home')}#how`" class="block transition hover:text-brand">Как это работает</Link>
+                            <component :is="isHome ? 'a' : Link" :href="homeHref('#how')" class="block transition hover:text-brand">Как это работает</component>
+                            <component :is="isHome ? 'a' : Link" :href="homeHref('#cities')" class="block transition hover:text-brand">Города</component>
                         </div>
                     </div>
                     <div>

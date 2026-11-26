@@ -1,5 +1,6 @@
 <script setup>
 import { ref, computed, watch, onMounted, onBeforeUnmount } from 'vue';
+import { usePage } from '@inertiajs/vue3';
 import PropertyCard from '@/Components/PropertyCard.vue';
 import PropertyFilters from '@/Components/PropertyFilters.vue';
 import SeoHead from '@/Components/SeoHead.vue';
@@ -38,19 +39,30 @@ const catalogSchema = computed(() => ({
     },
 }));
 
-const filters = ref({
-    search: '',
-    type: 'all',
-    status: 'all',
-    priceMin: '',
-    priceMax: '',
-    rooms: 'all'
-});
+const page = usePage();
+
+const propertyTypes = ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая', 'Земельный участок'];
+const propertyStatuses = ['Продается', 'Сдается'];
+
+const initialFilters = () => {
+    const params = new URLSearchParams(page.url.split('?')[1] || '');
+    const type = params.get('type');
+    const status = params.get('status');
+    const rooms = params.get('rooms');
+
+    return {
+        search: params.get('search') || '',
+        type: propertyTypes.includes(type) ? type : 'all',
+        status: propertyStatuses.includes(status) ? status : 'all',
+        priceMin: params.get('priceMin') || '',
+        priceMax: params.get('priceMax') || '',
+        rooms: ['1', '2', '3', '4', '5'].includes(rooms) ? rooms : 'all',
+    };
+};
+
+const filters = ref(initialFilters());
 
 const sortBy = ref('newest');
-
-const propertyTypes = ['Квартира', 'Дом', 'Таунхаус', 'Коммерческая'];
-const propertyStatuses = ['Продается', 'Сдается'];
 
 const backendProperties = ref([]);
 const backendUsed = ref(false);
@@ -83,7 +95,8 @@ const filteredProperties = computed(() => {
         const search = filters.value.search.toLowerCase();
         result = result.filter(p =>
             p.title.toLowerCase().includes(search) ||
-            p.address.toLowerCase().includes(search)
+            p.address.toLowerCase().includes(search) ||
+            (p.city || '').toLowerCase().includes(search)
         );
     }
 

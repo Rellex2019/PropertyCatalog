@@ -12,13 +12,16 @@ const canAccessAdmin = computed(() => (
     || ['manager', 'admin', 'main_admin'].includes(user.value?.role)
 ));
 
+const isHome = computed(() => page.url.split('?')[0].split('#')[0] === '/');
+const homeHref = (hash) => (isHome.value ? hash : `${route('home')}${hash}`);
+
 const navigation = computed(() => [
-    { label: 'Главная', href: route('home'), active: page.url === '/' },
-    { label: 'Каталог', href: route('catalog.index'), active: page.url.startsWith('/catalog') },
-    { label: 'Как это работает', href: `${route('home')}#how`, active: false },
-    { label: 'Города', href: `${route('home')}#cities`, active: false },
+    { label: 'Главная', href: isHome.value ? '#top' : route('home'), active: isHome.value, local: isHome.value },
+    { label: 'Каталог', href: route('catalog.index'), active: page.url.startsWith('/catalog'), local: false },
+    { label: 'Как это работает', href: homeHref('#how'), active: false, local: isHome.value },
+    { label: 'Города', href: homeHref('#cities'), active: false, local: isHome.value },
     ...(canAccessAdmin.value
-        ? [{ label: 'Админка', href: route('admin.dashboard'), active: page.url.startsWith('/admin') }]
+        ? [{ label: 'Админка', href: route('admin.dashboard'), active: page.url.startsWith('/admin'), local: false }]
         : []),
 ]);
 </script>
@@ -29,7 +32,8 @@ const navigation = computed(() => [
             <SiteBrand />
 
             <nav class="hidden items-center gap-8 text-sm md:flex">
-                <Link
+                <component
+                    :is="link.local ? 'a' : Link"
                     v-for="link in navigation"
                     :key="link.label"
                     :href="link.href"
@@ -37,7 +41,7 @@ const navigation = computed(() => [
                     :class="link.active ? 'text-white' : 'text-white/70 hover:text-white'"
                 >
                     {{ link.label }}
-                </Link>
+                </component>
             </nav>
 
             <div class="hidden items-center gap-3 md:flex">
@@ -81,7 +85,8 @@ const navigation = computed(() => [
         </div>
 
         <div v-if="mobileOpen" class="border-t border-white/10 bg-brand px-4 pb-5 pt-2 md:hidden">
-            <Link
+            <component
+                :is="link.local ? 'a' : Link"
                 v-for="link in navigation"
                 :key="link.label"
                 :href="link.href"
@@ -90,7 +95,7 @@ const navigation = computed(() => [
                 @click="mobileOpen = false"
             >
                 {{ link.label }}
-            </Link>
+            </component>
             <div class="mt-3 flex flex-wrap gap-3 border-t border-white/10 pt-4">
                 <template v-if="user">
                     <Link :href="route('dashboard')" class="site-btn-primary" @click="mobileOpen = false">
